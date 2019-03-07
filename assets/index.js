@@ -5,14 +5,15 @@
 
 function newCalcFile() {
     pywebview.api.new_calc_file().then(function(calc) {
-        str2Elem(calc)
+        $('#calc-file').text(calc)
+        str2Elem([''])
     })
 }
 
 function openCalcFile() {
     pywebview.api.open_calc_file().then(function(calc) {
         $('#calc-file').text(calc.file)
-        str2Elem(calc.content.replace(/\\n/g, '\n'))
+        str2Elem(calc.content)
     })
 }
 
