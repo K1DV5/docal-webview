@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <!-- katex -->
+        <link rel="stylesheet" href="katex/katex.min.css" crossorigin="anonymous">
+        <script src="katex/katex.min.js" crossorigin="anonymous"></script>
+        <script src="katex/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+        <style>
+html, body {
+    height: 100%;
+}
+
+#worksheet-menu {
+    position: fixed;
+    right: 3%;
+    bottom: 1%;
+}
+
+.katex {
+    font-size: 1em;
+}
+
+#worksheet {
+    height: 99%;
+    overflow-y: scroll;
+}
+
+#worksheet div {
+    margin-top: 2px;
+    padding: 2px;
+    font-family: serif;
+    font-size: 12pt;
+}
+
+#worksheet textarea {
+    font-family: monospace;
+    border: none;
+}
+        </style>
+
+        <title>docal</title>
+    </head>
+    <body>
+        <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <button id="toolbar-open">Opn</button>
+                        <span id="calc-file"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9 h-100">
+                <div id="worksheet"></div>
+                <div id="worksheet-menu">
+                    <button class="add-bel btn btn-sm btn-primary">Add</button>
+                    <button class="add-abv btn btn-sm btn-secondary">Add above</button>
+                    <button class="move-up btn btn-sm btn-secondary">Move-up</button>
+                    <button class="move-dn btn btn-sm btn-secondary">Move down</button>
+                    <button class="del-btn btn btn-sm btn-danger">Delete</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="index.js"></script>
+        <script src="worksheet.js"></script>
+    </body>
+</html>
