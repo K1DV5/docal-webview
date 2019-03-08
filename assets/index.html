@@ -42,31 +42,123 @@ html, body {
     font-family: monospace;
     border: none;
 }
+
+.container-fluid {
+    height: 92%;
+}
         </style>
 
         <title>docal</title>
     </head>
     <body>
-        <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="col-sm-3">
-                <div class="card">
-                    <div class="card-body">
-                        <button id="toolbar-open">Opn</button>
-                        <span id="calc-file"></span>
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <a class="navbar-brand" href="#">docal</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            File
+                            <span class="badge badge-info" id="calc-file">Untitled.py</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" id="toolbar-new">New</a>
+                            <a class="dropdown-item" id="toolbar-open">Open...</a>
+                            <a class="dropdown-item" id="toolbar-save">Save</a>
+                            <a class="dropdown-item" id="toolbar-saveas">Save As...</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" id="toolbar-exit">Exit</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Operations
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item doc-in-button">Select input document</a>
+                            <a class="dropdown-item doc-out-button">Select output document</a>
+                            <a class="dropdown-item doc-clear">Clear tags</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item send-calcs">Send Calculations</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Help
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" id="toolbar-guide">User's guide</a>
+                            <a class="dropdown-item" id="toolbar-about">About docal</a>
+                        </div>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline my-2 my-md-0"> -->
+                <!--     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+                <!--     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+                <!-- </form> -->
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row h-100">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for=doc-in">Document input</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="doc-in" placeholder="Type the name or..." aria-describedby="doc-in-help">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary doc-in-button" type="button">Browse</button>
+                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item doc-in-button">Browse</a>
+                                            <a class="dropdown-item doc-clear">Clear tags</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small id="doc-in-help" class="form-text text-muted">
+                                    The document that you wrote and contains the tags to be replaced.
+                                </small>
+                            </div><br>
+                            <div class="form-group">
+                                <label for=doc-out">Document output</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="doc-out" placeholder="Type the name or..." aria-describedby="doc-out-help">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary doc-out-button" type="button">Browse</button>
+                                    </div>
+                                </div>
+                                <small id="doc-out-help" class="form-text text-muted">
+                                    The document that you want as the output. If you make this the same as the input, you might lose the original
+                                </small>
+                            </div><br>
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="open-after">
+                                    <label class="custom-control-label" for="open-after">Open the document afterwards</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary send-calcs">Send calculations</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-9 h-100">
-                <div id="worksheet"></div>
-                <div id="worksheet-menu">
-                    <button class="add-bel btn btn-sm btn-primary">Add</button>
-                    <button class="add-abv btn btn-sm btn-secondary">Add above</button>
-                    <button class="move-up btn btn-sm btn-secondary">Move-up</button>
-                    <button class="move-dn btn btn-sm btn-secondary">Move down</button>
-                    <button class="del-btn btn btn-sm btn-danger">Delete</button>
+                <div class="col-sm-9 h-100">
+                    <div id="worksheet"></div>
+                    <div id="worksheet-menu">
+                        <button class="add-bel btn btn-sm btn-primary">Add</button>
+                        <button class="add-abv btn btn-sm btn-secondary">Add above</button>
+                        <button class="move-up btn btn-sm btn-secondary">Move-up</button>
+                        <button class="move-dn btn btn-sm btn-secondary">Move down</button>
+                        <button class="del-btn btn btn-sm btn-danger">Delete</button>
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
         <!-- Optional JavaScript -->

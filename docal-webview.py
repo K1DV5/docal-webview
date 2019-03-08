@@ -62,7 +62,6 @@ class Api():
                 else:
                     incomplete += part[0] + '\n' 
             chunks.append(self.py_2_ascii(incomplete))
-            pprint(chunks)
             self.calc_file = selected[0]
             return {'file': path.basename(selected[0]), 'content': chunks}
 
@@ -90,12 +89,12 @@ class Api():
             return selected if direc is None else selected[0]
 
     def send_calcs(self, data):
+        pprint(data)
         try:
             doc = document(data['in'], data['clear'])
             doc.send(self.ascii_2_py(data['calc'], True))
             doc.write(data['out'])
         except Exception as err:
-            raise err
             return ['Error', err.args[-1]]
         else:
             message = 'Document cleared successfully.' if data['clear'] \

@@ -43,7 +43,7 @@ function sendCalcs(clear, open) {
         'clear': clear,
         'calc': elem2Str(),
         'out': $('#doc-out').val(),
-        'open': open
+        'open': open ? true : false
     }
 
     pywebview.api.send_calcs(data).then(function(resp) {
