@@ -37,6 +37,21 @@ function selectDocFile(which) {
     })
 }
 
+// show messages in a messagebox
+function messageBox(title, message) {
+    let messageBox = $('#messageBox')
+    messageBox.find('.modal-title').text(title)
+    let body = messageBox.find('.modal-body')
+    if (typeof message === 'string') {
+        body.text(message)
+    } else {
+        // message is an element
+        body.text('')
+        body.append(message)
+    }
+    messageBox.modal('show')
+}
+
 function sendCalcs(clear, open) {
     let data = {
         'in': $('#doc-in').val(),
@@ -47,7 +62,7 @@ function sendCalcs(clear, open) {
     }
 
     pywebview.api.send_calcs(data).then(function(resp) {
-        alert(resp[1])
+        messageBox(resp[0], resp[1])
     })
 }
 
@@ -57,16 +72,20 @@ $('#toolbar-open')      .click(openCalcFile)
 $('#toolbar-save')      .click(function() {saveCalcFile(false)})
 $('#toolbar-saveas')    .click(function() {saveCalcFile(true)})
 $('#toolbar-exit')      .click(function() {pywebview.api.quit()})
+$('#toolbar-help')      .click(function() {let help = $('#help'); help.load('help.html'); messageBox('Help', help)})
 $('#toolbar-about')     .click(function() {
-                            alert('DoCaL 0.4.0\nPython 3.7.1\n\nNew releases can be downloaded from:\nhttps://github.com/K1DV5/DoCaL/releases \n\n© 2019 K1DV5')
+                            let about = document.createElement('div')
+                            let lines = 'DoCaL 0.4.0\nPython 3.7.1\n\nNew releases can be downloaded from:\nhttps://github.com/K1DV5/DoCaL/releases \n\n© 2019 K1DV5'.split('\n\n')
+    for (let i = 0; i < lines.length; i++) {
+        let p = document.createElement('p')
+        p.textContent = lines[i]
+        about.appendChild(p)
+    }
+                            messageBox('About', about)
                             })
 $('.doc-in-button')     .click(function() {selectDocFile('#doc-in')})
 $('.doc-out-button')    .click(function() {selectDocFile('#doc-out')})
 $('.doc-clear')         .click(function() {sendCalcs(true)})
 $('.send-calcs')        .click(function(eve) {sendCalcs(false, $('#open-after').prop('checked')); eve.preventDefault();})
 
-// key bindings
-// $(window)               .keydown(function(eve) {if (eve.key == 's' && eve.ctrlKey) {saveCalcFile(false)}})
-// $(window)               .keydown(function(eve) {if (eve.key == 'o' && eve.ctrlKey) {openCalcFile()}})
-// $(window)               .keydown(function(eve) {if (eve.ctrlKey) alert(eve.keyCode)})
 $('#calc-content')      .keydown(function(eve) {if (eve.key == 'Tab') {$(this).val($(this).val() + '\t'); eve.preventDefault()}})

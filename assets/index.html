@@ -18,8 +18,8 @@ html, body {
 
 #worksheet-menu {
     position: fixed;
-    right: 3%;
-    bottom: 1%;
+    right: 5%;
+    top: 7%;
 }
 
 .katex {
@@ -32,8 +32,6 @@ html, body {
 }
 
 #worksheet div {
-    margin-top: 2px;
-    padding: 2px;
     font-family: serif;
     font-size: 12pt;
 }
@@ -90,7 +88,7 @@ html, body {
                             Help
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" id="toolbar-guide">User's guide</a>
+                            <a class="dropdown-item" id="toolbar-help">Help</a>
                             <a class="dropdown-item" id="toolbar-about">About docal</a>
                         </div>
                     </li>
@@ -104,63 +102,87 @@ html, body {
         <div class="container-fluid">
             <div class="row h-100">
                 <div class="col-sm-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for=doc-in">Document input</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="doc-in" placeholder="Type the name or..." aria-describedby="doc-in-help">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary doc-in-button" type="button">Browse</button>
-                                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item doc-in-button">Browse</a>
-                                            <a class="dropdown-item doc-clear">Clear tags</a>
-                                        </div>
+                    <div class="rounded border p-2 my-2">
+                        <div class="form-group">
+                            <label for=doc-in">Document input</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="doc-in" placeholder="Type the name or..." aria-describedby="doc-in-help">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary doc-in-button" type="button">Browse</button>
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item doc-in-button">Browse</a>
+                                        <a class="dropdown-item doc-clear">Clear tags</a>
                                     </div>
                                 </div>
-                                <small id="doc-in-help" class="form-text text-muted">
-                                    The document that you wrote and contains the tags to be replaced.
-                                </small>
-                            </div><br>
-                            <div class="form-group">
-                                <label for=doc-out">Document output</label>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="doc-out" placeholder="Type the name or..." aria-describedby="doc-out-help">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary doc-out-button" type="button">Browse</button>
-                                    </div>
-                                </div>
-                                <small id="doc-out-help" class="form-text text-muted">
-                                    The document that you want as the output. If you make this the same as the input, you might lose the original
-                                </small>
-                            </div><br>
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="open-after">
-                                    <label class="custom-control-label" for="open-after">Open the document afterwards</label>
+                            </div>
+                            <small id="doc-in-help" class="form-text text-muted">
+                                The document that you wrote and contains the tags to be replaced.
+                            </small>
+                        </div><br>
+                        <div class="form-group">
+                            <label for=doc-out">Document output</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="doc-out" placeholder="Type the name or..." aria-describedby="doc-out-help">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary doc-out-button" type="button">Browse</button>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary send-calcs">Send calculations</button>
+                            <small id="doc-out-help" class="form-text text-muted">
+                                The document that you want as the output. If you make this the same as the input, you might lose the original
+                            </small>
+                        </div><br>
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="open-after" checked>
+                                <label class="custom-control-label" for="open-after">Open the document afterwards</label>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary send-calcs">Send calculations</button>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-9 h-100">
                     <div id="worksheet"></div>
                     <div id="worksheet-menu">
-                        <button class="add-bel btn btn-sm btn-primary">Add</button>
-                        <button class="add-abv btn btn-sm btn-secondary">Add above</button>
-                        <button class="move-up btn btn-sm btn-secondary">Move-up</button>
-                        <button class="move-dn btn btn-sm btn-secondary">Move down</button>
-                        <button class="del-btn btn btn-sm btn-danger">Delete</button>
+                        <button class="dropdown-toggle btn btn-primary btn-sm" id="menuDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Menu
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="menuDropdown">
+                            <a class="add-bel dropdown-item text-primary">Add</a>
+                            <a class="add-abv dropdown-item text-secondary">Add above</a>
+                            <a class="move-up dropdown-item text-secondary">Move up</a>
+                            <a class="move-dn dropdown-item text-secondary">Move down</a>
+                            <a class="del-btn dropdown-item text-danger">Delete</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- message box -->
+        <div class="modal fade" id="messageBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- the help text will be here -->
+        <div id="help"></div>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="js/jquery-3.3.1.min.js"></script>

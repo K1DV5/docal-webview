@@ -3,12 +3,24 @@
 var currentParaDivs;
 var currentFocus;
 
+function focusEntry(div, input) {
+    if (currentFocus) {
+        currentFocus.classList.remove('border-primary')
+    }
+    currentFocus = div
+    div.classList.add('border-primary')
+    if (input) {
+        input.focus()
+    }
+}
+
 function editEntry(eve) {
-    let parentDiv = eve.currentTarget.parentElement
-    eve.currentTarget.style.display = 'none'
-    let textarea = parentDiv.querySelector('textarea')
-    textarea.style.display = 'block'
-    textarea.focus()
+    let target = eve.currentTarget
+    let paraDiv = target.querySelector('div')
+    paraDiv.style.display = 'none'
+    let input = target.querySelector('.input')
+    input.style.display = 'block'
+    focusEntry(target, input)
 }
 
 function delEntry() {
@@ -33,7 +45,7 @@ function addEntry(eve, nextTo) {
         worksheet.appendChild(div)
     }
     configNewDiv(div, '', true)
-    div.querySelector('textarea').focus()
+    focusEntry(div, div.querySelector('.input'))
     eve.preventDefault()
 }
 
@@ -56,7 +68,7 @@ function moveEntry(eve) {
             div.insertAdjacentElement('beforebegin', moved)
         }
     }
-    currentFocus.querySelector('textarea').focus()
+    focusEntry(currentFocus, currentFocus.querySelector('.input'))
     eve.preventDefault()
 }
 
@@ -66,22 +78,22 @@ function updateEntries() {
     for (let i = 0; i < entryDivs.length; i++) {
         paraDivs.push(entryDivs[i].querySelector('div'))
     }
-    renderPara(paraDivs)
+    renderPara(paraDivs, true)
 }
 
 function resizeEntry(arg) {
-    let textarea = arg.currentTarget
-    textarea.style.height = '1px'
-    textarea.style.height = textarea.scrollHeight + 'px'
+    let input = arg.currentTarget
+    input.style.height = '1px'
+    input.style.height = input.scrollHeight + 'px'
 }
 
 function renderEntry(eve) {
     if (eve.key == 'Enter') {
         let input = eve.currentTarget
-        if (input.value) {
+        if (input.value.trim()) {
             let lineNo = input.value.slice(0, input.selectionStart).split('\n').length - 1
             let currentLine = input.value.split('\n')[lineNo]
-            if (currentLine.match(/^\s*\w+[\w\d]*.*=.*$/)) {
+            if (currentLine.match(/^\s*[^#]+/)) {
                 let div = eve.currentTarget.parentElement
                 let paraDiv = div.querySelector('div')
                 // only if there is something meaningful
@@ -96,49 +108,59 @@ function renderEntry(eve) {
                 eve.preventDefault()
             }
         }
+    } else if (eve.key == 'Escape') {
+        let input = eve.currentTarget
+        if (input.value.trim()) {
+            input.style.display = 'none'
+            input.parentElement.querySelector('div').style.display = 'block'
+            eve.preventDefault()
+        }
     }
 }
 
 function configNewDiv(div, texStr, editable) {
     texStr = texStr || ''
     // config div
-    div.className = 'rounded border'
-    let textarea = document.createElement('textarea')
+    div.className = 'rounded border my-1 p-1'
+    div.tabIndex = '0'
+    div.addEventListener('focus', function() {focusEntry(div)})
+    div.addEventListener('dblclick', editEntry)
+    let input = document.createElement('textarea')
     let paraDiv = document.createElement('div')
     // insert to div
-    div.appendChild(textarea)
+    div.appendChild(input)
     div.appendChild(paraDiv)
     // configure input
-    textarea.value = texStr
-    textarea.placeholder = '## Start typing your calculations.'
-    textarea.className = 'form-control'
-    textarea.addEventListener('input', resizeEntry)
-    textarea.addEventListener('keydown', renderEntry)
-    textarea.addEventListener('focus', function() {currentFocus = div})
-    textarea.style.height = '1px'
-    textarea.style.height = textarea.scrollHeight + 'px'
+    input.value = texStr
+    input.placeholder = '## Start typing your calculations.'
+    input.className = 'form-control input'
+    input.addEventListener('input', resizeEntry)
+    input.addEventListener('keydown', renderEntry)
+    input.addEventListener('focus', function() {focusEntry(div)})
+    input.style.height = '1px'
+    input.style.height = input.scrollHeight + 'px'
     // configure paraDiv
-    paraDiv.addEventListener('click', editEntry)
+    paraDiv.addEventListener('click', focusEntry(div))
     // what to show
     if (editable || !texStr) {
         paraDiv.style.display = 'none'
-        textarea.style.display = 'block'
+        input.style.display = 'block'
     } else {
         paraDiv.style.display = 'block'
-        textarea.style.display = 'none'
+        input.style.display = 'none'
     }
 }
 
-function renderPara(paraDivs) {
+function renderPara(paraDivs, flush) {
     currentParaDivs = paraDivs
     // whether the previously defined vars are flushed
-    let flush = paraDivs.length > 1
+    flush = flush || paraDivs.length > 1
     let inputs = [flush, []]
     for (let i = 0; i < currentParaDivs.length; i++) {
-        let input = currentParaDivs[i].parentElement.querySelector('textarea');
+        let input = currentParaDivs[i].parentElement.querySelector('.input');
         if (input.value.trim()) {
             inputs[1].push(input.value)
-            // hide buttons and textarea
+            // hide buttons and input
             input.style.display = 'none';
             currentParaDivs[i].style.display = 'block'
         } else {
@@ -180,7 +202,7 @@ function elem2Str() {
     let entryDivs = document.querySelector('#worksheet').children
     let calc = ''
     for (let i = 0; i < entryDivs.length; i++) {
-        calc += '\n' + entryDivs[i].querySelector('textarea').value
+        calc += '\n' + entryDivs[i].querySelector('.input').value
     }
     return calc
 }
@@ -192,3 +214,42 @@ document.querySelector('.move-dn').addEventListener('click', moveEntry)
 document.querySelector('.del-btn').addEventListener('click', delEntry)
 str2Elem([''])
 
+// Make the DIV element draggable:
+dragElement(document.getElementById("worksheet-menu"));
+
+function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    elmnt.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+        return false
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+        elmnt.preventClick = true
+    }
+}

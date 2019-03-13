@@ -1,4 +1,5 @@
 from pprint import pprint
+import re
 from os import path, startfile
 import webview
 from docal import document
@@ -21,17 +22,24 @@ class Api():
             '\\end{split}\n\\end{align}': '\\end{aligned}\\]',
             '\\slash': '/',
         }
+        # the current condition of the entries (for performance)
+        self.current_tex = []
+        # code that is alien to normal people
         self.pre_code = ['from math import *']
+        for code in self.pre_code:
+            exec(code, self.working_dict)
 
     def new_calc_file(self, arg):
         self.calc_file = self.default_calc_file
         return self.calc_file
 
     def ascii_2_py(self, asc: str, include_pre=False):
-        replaced = {'^': '**'}
+        # allow ^ as power, and implicit multiplication like 2x as 2*x
+        # replaced = {r'\^': '**', r'(^[^#].*)(\b\d+)(\w+\d*)(?=[^\w\d]*)': r'\1\2*\3'}
+        replaced = {r'\^': '**'}
         py = asc
         for old, new in replaced.items():
-            py = py.replace(old, new)
+            py = re.sub(old, new, py)
         if include_pre:
             return '\n\n'.join(self.pre_code + [py])
         return py
@@ -89,7 +97,6 @@ class Api():
             return selected if direc is None else selected[0]
 
     def send_calcs(self, data):
-        pprint(data)
         try:
             doc = document(data['in'], data['clear'])
             doc.send(self.ascii_2_py(data['calc'], True))
@@ -133,6 +140,14 @@ class Api():
                     # raise exc
             else:
                 processed.append(chunk)
+        # this is for performance, selective updating
+        if flush:
+            self.current_tex = []
+            for index, (current, new) in enumerate(zip(self.current_tex, processed)):
+                if current == new:
+                    processed[index] = 0
+        self.current_tex += processed
+
         return processed
 
     def quit(self, arg):
