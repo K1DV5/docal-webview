@@ -14,7 +14,6 @@ class Api():
         self.doc_types = ('Document files (*.tex;*.docx)', 'All files (*.*)')
         self.working_dict = {}
         self.process = document().process_content
-        self.c_tag = ''
         self.replaced = {
             '\\begin{equation}': '\\[',
             '\\end{equation}': '\\]',
@@ -124,10 +123,11 @@ class Api():
                 try:
                     built = ''
                     processed_ls = self.process(self.ascii_2_py(chunk), self.working_dict)
+                    c_tag = None
                     for tag, part in processed_ls:
-                        if tag != self.c_tag:
-                            built += f'[TAG: {tag}]\n\n'
-                            self.c_tag = tag
+                        if tag != c_tag and tag:
+                            built += f'[TAG] {tag}\n\n'
+                            c_tag = tag
                         built += part + '\n'
                     for o, r in self.replaced.items():
                         built = built.replace(o, r)

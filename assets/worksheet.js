@@ -175,8 +175,16 @@ function renderPara(paraDivs, flush) {
                 // remove current content
                 currentParaDivs[i].innerHTML = '';
                 for (let j = 0; j < divs[i].length; j++) {
+                    let line = divs[i][j]
                     let para = document.createElement('p');
-                    para.textContent = divs[i][j].replace(/\\n/g, '\n').replace(/\r/g, '\\r').replace(/\\\\r/g, '\\r');
+                    if (line.trim().indexOf('[TAG]') === 0) {
+                        let span = document.createElement('span')
+                        span.textContent = '#' + line.trim().split(' ')[1]
+                        span.className = 'badge badge-primary'
+                        para.appendChild(span)
+                    } else {
+                        para.innerHTML = divs[i][j].replace(/\\n/g, '\n').replace(/\r/g, '\\r').replace(/\\\\r/g, '\\r');
+                    }
                     currentParaDivs[i].appendChild(para);
                 }
                 renderMathInElement(currentParaDivs[i]);
