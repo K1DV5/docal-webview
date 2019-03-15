@@ -106,7 +106,7 @@ class Api():
             message = 'Document cleared successfully.' if data['clear'] \
                 else 'Calculations sent successfully.'
             if data['open']:
-                startfile(data['out'])
+                startfile(doc.document_file.outfile)
             else:
                 return ['Success', message]
 
@@ -158,4 +158,4 @@ class Api():
         print(what)
 
 
-webview.create_window('docal', 'assets/index.html', js_api=Api(), debug=True)
+webview.create_window('docal', 'assets/index.html', js_api=Api())
