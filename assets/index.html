@@ -16,12 +16,6 @@ html, body {
     height: 100%;
 }
 
-#worksheet-menu {
-    position: fixed;
-    right: 5%;
-    top: 7%;
-}
-
 .katex {
     font-size: 1em;
 }
@@ -93,6 +87,13 @@ html, body {
                         </div>
                     </li>
                 </ul>
+                <div id="worksheet-menu">
+                    <button class="add-bel btn btn-sm btn-primary">Add</button>
+                    <button class="add-abv btn btn-sm btn-secondary">Add above</button>
+                    <button class="move-up btn btn-sm btn-secondary">Move up</button>
+                    <button class="move-dn btn btn-sm btn-secondary">Move down</button>
+                    <button class="del-btn btn btn-sm btn-danger">Delete</button>
+                </div>
                 <!-- <form class="form-inline my-2 my-md-0"> -->
                 <!--     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
                 <!--     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
@@ -147,18 +148,6 @@ html, body {
                 </div>
                 <div class="col-sm-9 h-100">
                     <div id="worksheet"></div>
-                    <div id="worksheet-menu">
-                        <button class="dropdown-toggle btn btn-primary btn-sm" id="menuDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Menu
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="menuDropdown">
-                            <a class="add-bel dropdown-item text-primary">Add</a>
-                            <a class="add-abv dropdown-item text-secondary">Add above</a>
-                            <a class="move-up dropdown-item text-secondary">Move up</a>
-                            <a class="move-dn dropdown-item text-secondary">Move down</a>
-                            <a class="del-btn dropdown-item text-danger">Delete</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
