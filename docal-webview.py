@@ -27,6 +27,8 @@ class Api():
         self.pre_code = ['from math import *']
         for code in self.pre_code:
             exec(code, self.working_dict)
+        # the file opened when open_outfile() is called
+        self.doc_to_open = None
 
     def new_calc_file(self, arg):
         self.calc_file = self.default_calc_file
@@ -95,20 +97,21 @@ class Api():
         if selected:
             return selected if direc is None else selected[0]
 
+    def open_outfile(self, arg):
+        if self.doc_to_open:
+            startfile(self.doc_to_open)
+
     def send_calcs(self, data):
         try:
-            doc = document(data['in'], data['clear'])
+            doc = document(data['in'], data['clear'], data['level'])
             doc.send(self.ascii_2_py(data['calc'], True))
             doc.write(data['out'])
         except Exception as err:
-            return ['Error', err.args[-1]]
+            return ['Error', str(err)]
         else:
-            message = 'Document cleared successfully.' if data['clear'] \
-                else 'Calculations sent successfully.'
-            if data['open']:
-                startfile(doc.document_file.outfile)
-            else:
-                return ['Success', message]
+            messages = doc.log if doc.log else ['No log for current log level']
+            self.doc_to_open = doc.document_file.outfile
+            return ['Log', messages]
 
     def process_and_tex(self, inputs: list):
         flush, chunks = inputs
@@ -149,6 +152,9 @@ class Api():
         self.current_tex += processed
 
         return processed
+
+    def open_help(self, arg):
+        startfile(path.relpath('assets/help.pdf'))
 
     def quit(self, arg):
         # until i find a better way

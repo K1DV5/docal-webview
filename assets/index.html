@@ -104,7 +104,7 @@ html, body {
             <div class="row h-100">
                 <div class="col-sm-3">
                     <div class="rounded border p-2 my-2">
-                        <div class="form-group">
+                        <div>
                             <label for=doc-in">Document input</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="doc-in" placeholder="Type the name or..." aria-describedby="doc-in-help">
@@ -122,27 +122,40 @@ html, body {
                             <small id="doc-in-help" class="form-text text-muted">
                                 The document that you wrote and contains the tags to be replaced.
                             </small>
-                        </div><br>
-                        <div class="form-group">
+                        </div>
+                        <div class="mt-5">
                             <label for=doc-out">Document output</label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" id="doc-out" placeholder="Type the name or..." aria-describedby="doc-out-help">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary doc-out-button" type="button">Browse</button>
+                                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item doc-out-button">Browse</a>
+                                        <a class="dropdown-item doc-out-open">Open</a>
+                                    </div>
                                 </div>
                             </div>
                             <small id="doc-out-help" class="form-text text-muted">
                                 The document that you want as the output. If you make this the same as the input, you might lose the original
                             </small>
-                        </div><br>
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="open-after" checked>
-                                <label class="custom-control-label" for="open-after">Open the document afterwards</label>
+                        </div>
+                        <div class="mt-5 input-group">
+                            <label for="log-level" class="col-sm-5">Log level</label>
+                            <div class="col-sm-7">
+                            <select class="custom-select log-level" id="log-level">
+                                <option value="WARNING" selected>Warning</option>
+                                <option value="ERROR">Error</option>
+                                <option value="INFO">Info</option>
+                            </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary send-calcs">Send calculations</button>
+                        <div class="mt-5">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary send-calcs">Send</button>
+                            </div>
                         </div>
                     </div>
                 </div>
