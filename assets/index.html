@@ -141,8 +141,15 @@ html, body {
                                 <label class="custom-control-label" for="open-after">Open the document afterwards</label>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary send-calcs">Send calculations</button>
+                        <div class="input-group">
+                            <select class="custom-select log-level">
+                                <option value="WARNING" selected>Log warnings</option>
+                                <option value="ERROR">Log errors</option>
+                                <option value="INFO">Log info</option>
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-primary send-calcs">Send</button>
+                            </div>
                         </div>
                     </div>
                 </div>

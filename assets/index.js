@@ -58,7 +58,8 @@ function sendCalcs(clear, open) {
         'clear': clear,
         'calc': elem2Str(),
         'out': $('#doc-out').val(),
-        'open': open ? true : false
+        'open': open ? true : false,
+        'level': $('.log-level').val()
     }
 
     pywebview.api.send_calcs(data).then(function(resp) {
@@ -72,17 +73,17 @@ $('#toolbar-open')      .click(openCalcFile)
 $('#toolbar-save')      .click(function() {saveCalcFile(false)})
 $('#toolbar-saveas')    .click(function() {saveCalcFile(true)})
 $('#toolbar-exit')      .click(function() {pywebview.api.quit()})
-$('#toolbar-help')      .click(function() {let help = $('#help'); help.load('help.html'); messageBox('Help', help)})
+$('#toolbar-help')      .click(function() {pywebview.api.open_help()})
 $('#toolbar-about')     .click(function() {
-                            let about = document.createElement('div')
-                            let lines = 'DoCaL 0.4.0\nPython 3.7.1\n\nNew releases can be downloaded from:\nhttps://github.com/K1DV5/DoCaL/releases \n\n© 2019 K1DV5'.split('\n\n')
+    let about = document.createElement('div')
+    let lines = 'DoCaL 0.4.0\nPython 3.7.1\n\nNew releases can be downloaded from:\nhttps://github.com/K1DV5/DoCaL/releases \n\n© 2019 K1DV5'.split('\n\n')
     for (let i = 0; i < lines.length; i++) {
         let p = document.createElement('p')
         p.textContent = lines[i]
         about.appendChild(p)
     }
-                            messageBox('About', about)
-                            })
+    messageBox('About', about)
+})
 $('.doc-in-button')     .click(function() {selectDocFile('#doc-in')})
 $('.doc-out-button')    .click(function() {selectDocFile('#doc-out')})
 $('.doc-clear')         .click(function() {sendCalcs(true)})

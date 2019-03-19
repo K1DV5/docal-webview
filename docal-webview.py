@@ -97,11 +97,11 @@ class Api():
 
     def send_calcs(self, data):
         try:
-            doc = document(data['in'], data['clear'])
+            doc = document(data['in'], data['clear'], data['level'], True)
             doc.send(self.ascii_2_py(data['calc'], True))
             doc.write(data['out'])
         except Exception as err:
-            return ['Error', err.args[-1]]
+            return ['Error', str(err)]
         else:
             message = 'Document cleared successfully.' if data['clear'] \
                 else 'Calculations sent successfully.'
@@ -149,6 +149,9 @@ class Api():
         self.current_tex += processed
 
         return processed
+
+    def open_help(self, arg):
+        startfile(path.relpath('assets/help.pdf'))
 
     def quit(self, arg):
         # until i find a better way
