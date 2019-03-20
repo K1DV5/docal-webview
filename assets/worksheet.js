@@ -175,16 +175,11 @@ function renderPara(paraDivs, flush) {
                 // remove current content
                 currentParaDivs[i].innerHTML = '';
                 for (let j = 0; j < divs[i].length; j++) {
-                    let line = divs[i][j]
+                    let line = divs[i][j].replace(/\\n/g, '\n').replace(/\r/g, '\\r').replace(/\\\\r/g, '\\r');
                     let para = document.createElement('p');
-                    if (line.trim().indexOf('[TAG]') === 0) {
-                        let span = document.createElement('span')
-                        span.textContent = '#' + line.trim().split(' ')[1]
-                        span.className = 'badge badge-primary'
-                        para.appendChild(span)
-                    } else {
-                        para.innerHTML = divs[i][j].replace(/\\n/g, '\n').replace(/\r/g, '\\r').replace(/\\\\r/g, '\\r');
-                    }
+                    let tagRegex = '\\[#TAG\\]([\\w\\d]+)'
+                    let badgeStr = '<span class="badge badge-primary">#$1</badge>'
+                    para.innerHTML = line.replace(new RegExp('^' + tagRegex, 'g'), badgeStr).replace(new RegExp(tagRegex), '<br/>' + badgeStr)
                     currentParaDivs[i].appendChild(para);
                 }
                 renderMathInElement(currentParaDivs[i]);

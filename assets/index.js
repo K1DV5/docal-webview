@@ -52,7 +52,7 @@ function messageBox(title, message) {
     messageBox.modal('show')
 }
 
-function sendCalcs(clear, open) {
+function sendCalcs(clear) {
     let data = {
         'in': $('#doc-in').val(),
         'clear': clear,
@@ -86,8 +86,9 @@ $('#toolbar-about')     .click(function() {
 })
 $('.doc-in-button')     .click(function() {selectDocFile('#doc-in')})
 $('.doc-out-button')    .click(function() {selectDocFile('#doc-out')})
-$('.doc-out-open')      .click(function() {pywebview.api.open_outfile()})
+$('.doc-in-open')       .click(function() {pywebview.api.open_document([$('#doc-in').val(), false])})
+$('.doc-out-open')      .click(function() {pywebview.api.open_document([$('#doc-out').val(), true])})
 $('.doc-clear')         .click(function() {sendCalcs(true)})
-$('.send-calcs')        .click(function(eve) {sendCalcs(false, $('#open-after').prop('checked')); eve.preventDefault();})
+$('.send-calcs')        .click(function(eve) {sendCalcs(false); eve.preventDefault();})
 
 $('#calc-content')      .keydown(function(eve) {if (eve.key == 'Tab') {$(this).val($(this).val() + '\t'); eve.preventDefault()}})

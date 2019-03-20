@@ -28,7 +28,7 @@ class Api():
         for code in self.pre_code:
             exec(code, self.working_dict)
         # the file opened when open_outfile() is called
-        self.doc_to_open = None
+        self.doc_in = self.doc_out = None
 
     def new_calc_file(self, arg):
         self.calc_file = self.default_calc_file
@@ -97,9 +97,16 @@ class Api():
         if selected:
             return selected if direc is None else selected[0]
 
-    def open_outfile(self, arg):
-        if self.doc_to_open:
-            startfile(self.doc_to_open)
+    def open_document(self, data):
+        if data[0]:
+            startfile(data[0])
+        else:
+            if data[1]:
+                # open the out file
+                if self.doc_out:
+                    startfile(self.doc_out)
+            elif self.doc_in:
+                startfile(self.doc_in)
 
     def send_calcs(self, data):
         try:
@@ -109,9 +116,10 @@ class Api():
         except Exception as err:
             return ['Error', str(err)]
         else:
-            messages = doc.log if doc.log else ['No log for current log level']
-            self.doc_to_open = doc.document_file.outfile
-            return ['Log', messages]
+            self.doc_in = doc.document_file.infile
+            self.doc_out = doc.document_file.outfile
+            if doc.log:
+                return ['Log', doc.log]
 
     def process_and_tex(self, inputs: list):
         flush, chunks = inputs
@@ -129,7 +137,7 @@ class Api():
                     c_tag = None
                     for tag, part in processed_ls:
                         if tag != c_tag and tag:
-                            built += f'[TAG] {tag}\n\n'
+                            built += f'[#TAG]{tag}\n\n'
                             c_tag = tag
                         built += part + '\n'
                     for o, r in self.replaced.items():
