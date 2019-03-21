@@ -146,11 +146,11 @@ html, body {
                         <div class="mt-5 input-group">
                             <label for="log-level" class="col-sm-5">Log level</label>
                             <div class="col-sm-7">
-                            <select class="custom-select log-level" id="log-level">
-                                <option value="WARNING" selected>Warning</option>
-                                <option value="ERROR">Error</option>
-                                <option value="INFO">Info</option>
-                            </select>
+                                <select class="custom-select log-level" id="log-level">
+                                    <option value="WARNING" selected>Warning</option>
+                                    <option value="ERROR">Error</option>
+                                    <option value="INFO">Info</option>
+                                </select>
                             </div>
                         </div>
                         <div class="mt-5">
@@ -160,8 +160,51 @@ html, body {
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-9 h-100">
+                <div class="col-sm-8 h-100">
                     <div id="worksheet"></div>
+                </div>
+                <div class="col-sm-1 h-100 calc-entry-options">
+                    <div class="mb-3">
+                        Options
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <input type="text" class="form-control option option-unit" placeholder="Unit">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <textarea class="form-control option option-note" placeholder="Note"></textarea>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="d-inline">
+                            <label for="select-steps">Steps &nbsp;</label>
+                        </div>
+                        <div class="d-inline" id="select-steps">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input option option-step" id="customCheck1" value="1">
+                                <label class="custom-control-label" for="customCheck1">1</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input option option-step" id="customCheck2" value="2">
+                                <label class="custom-control-label" for="customCheck2">2</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input option option-step" id="customCheck3" value="3">
+                                <label class="custom-control-label" for="customCheck3">3</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input option option-inline" id="customCheck4">
+                        <label class="custom-control-label" for="customCheck4">Inline</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input option option-horizontal" id="customCheck5">
+                        <label class="custom-control-label" for="customCheck5">Horizontal</label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input option option-hidden" id="customCheck6">
+                        <label class="custom-control-label" for="customCheck6">Hidden</label>
+                    </div>
+                    <button class="btn btn-primary btn-sm mt-3 insert-options-btn">Insert</button>
                 </div>
             </div>
         </div>
@@ -190,7 +233,7 @@ html, body {
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
         <script src="js/jquery-3.3.1.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="index.js"></script>
         <script src="worksheet.js"></script>
+        <script src="index.js"></script>
     </body>
 </html>

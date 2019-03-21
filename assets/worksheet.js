@@ -2,6 +2,8 @@
 // the current working para div (pywebview's promise only manipulates globals!)
 var currentParaDivs;
 var currentFocus;
+var currentFocusInput;
+const optionsForm = document.querySelector('.calc-entry-options')
 
 function focusEntry(div, input) {
     if (currentFocus) {
@@ -136,7 +138,7 @@ function configNewDiv(div, texStr, editable) {
     input.className = 'form-control input'
     input.addEventListener('input', resizeEntry)
     input.addEventListener('keydown', renderEntry)
-    input.addEventListener('focus', function() {focusEntry(div)})
+    input.addEventListener('focus', function() {currentFocusInput = input; focusEntry(div)})
     input.style.height = '1px'
     input.style.height = input.scrollHeight + 'px'
     // configure paraDiv
@@ -210,13 +212,44 @@ function elem2Str() {
     return calc
 }
 
+function insertOptions() {
+    if (currentFocusInput && currentFocusInput.style.display == 'block') {
+        let options = []
+        let steps = ''
+        let optionInputs = optionsForm.querySelectorAll('.option')
+        for (let i = 0; i < optionInputs.length; i++) {
+            let current = optionInputs[i]
+            let currentClasses = current.classList
+            if (currentClasses.contains('option-unit') && current.value) {
+                options.push(current.value)
+            } else if (currentClasses.contains('option-note') && current.value) {
+                options.push('# ' + current.value)
+            } else if (currentClasses.contains('option-step') && current.checked) {
+                steps += current.value
+            } else if (currentClasses.contains('option-inline') && current.checked) {
+                options.push('$')
+            } else if (currentClasses.contains('option-horizontal') && current.checked) {
+                options.push('-')
+            } else if (currentClasses.contains('option-hidden') && current.checked) {
+                options.push(';')
+            }
+        }
+        if (steps) {
+            options.push(steps)
+        }
+        let input = currentFocusInput
+        let lineNo = input.value.slice(0, input.selectionStart).split('\n').length - 1
+        let lines = input.value.split('\n')
+        lines[lineNo] = lines[lineNo].split('#')[0].trim() + ' # ' + options.join(', ')
+        input.value = lines.join('\n')
+    }
+}
+
 document.querySelector('.add-bel').addEventListener('click', addEntry)
 document.querySelector('.add-abv').addEventListener('click', addEntry)
 document.querySelector('.move-up').addEventListener('click', moveEntry)
 document.querySelector('.move-dn').addEventListener('click', moveEntry)
 document.querySelector('.del-btn').addEventListener('click', delEntry)
+document.querySelector('.calc-entry-options textarea').addEventListener('input', resizeEntry)
+document.querySelector('.insert-options-btn').addEventListener('click', insertOptions)
 str2Elem([''])
-
-// Make the DIV element draggable:
-dragElement(document.getElementById("worksheet-menu"));
-
