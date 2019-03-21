@@ -214,34 +214,37 @@ function elem2Str() {
 
 function insertOptions() {
     if (currentFocusInput && currentFocusInput.style.display == 'block') {
-        let options = []
-        let steps = ''
-        let optionInputs = optionsForm.querySelectorAll('.option')
-        for (let i = 0; i < optionInputs.length; i++) {
-            let current = optionInputs[i]
-            let currentClasses = current.classList
-            if (currentClasses.contains('option-unit') && current.value) {
-                options.push(current.value)
-            } else if (currentClasses.contains('option-note') && current.value) {
-                options.push('# ' + current.value)
-            } else if (currentClasses.contains('option-step') && current.checked) {
-                steps += current.value
-            } else if (currentClasses.contains('option-inline') && current.checked) {
-                options.push('$')
-            } else if (currentClasses.contains('option-horizontal') && current.checked) {
-                options.push('-')
-            } else if (currentClasses.contains('option-hidden') && current.checked) {
-                options.push(';')
-            }
-        }
-        if (steps) {
-            options.push(steps)
-        }
         let input = currentFocusInput
         let lineNo = input.value.slice(0, input.selectionStart).split('\n').length - 1
         let lines = input.value.split('\n')
-        lines[lineNo] = lines[lineNo].split('#')[0].trim() + ' # ' + options.join(', ')
-        input.value = lines.join('\n')
+        let baseLine = lines[lineNo].split('#')[0]
+        if (baseLine) {
+            let options = []
+            let steps = ''
+            let optionInputs = optionsForm.querySelectorAll('.option')
+            for (let i = 0; i < optionInputs.length; i++) {
+                let current = optionInputs[i]
+                let currentClasses = current.classList
+                if (currentClasses.contains('option-unit') && current.value) {
+                    options.push(current.value)
+                } else if (currentClasses.contains('option-note') && current.value) {
+                    options.push('# ' + current.value)
+                } else if (currentClasses.contains('option-step') && current.checked) {
+                    steps += current.value
+                } else if (currentClasses.contains('option-inline') && current.checked) {
+                    options.push('$')
+                } else if (currentClasses.contains('option-horizontal') && current.checked) {
+                    options.push('-')
+                } else if (currentClasses.contains('option-hidden') && current.checked) {
+                    options.push(';')
+                }
+            }
+            if (steps) {
+                options.push(steps)
+            }
+            lines[lineNo] = lines[lineNo].split('#')[0].trim() + (options.length ? ' # ' + options.join(', ') : '')
+            input.value = lines.join('\n')
+        }
     }
 }
 

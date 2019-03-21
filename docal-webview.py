@@ -31,8 +31,7 @@ class Api():
         self.doc_in = self.doc_out = None
 
     def new_calc_file(self, arg):
-        self.calc_file = self.default_calc_file
-        return self.calc_file
+        webview.set_title('docal')
 
     def ascii_2_py(self, asc: str, include_pre=False):
         # allow ^ as power, and implicit multiplication like 2x as 2*x
@@ -72,7 +71,8 @@ class Api():
                     incomplete += part[0] + '\n' 
             chunks.append(self.py_2_ascii(incomplete))
             self.calc_file = selected[0]
-            return {'file': path.basename(selected[0]), 'content': chunks}
+            webview.set_title('docal - ' + selected[0])
+            return chunks
 
     def save_calc_file(self, args):
         if self.calc_file == self.default_calc_file or args['saveas']:
@@ -85,7 +85,7 @@ class Api():
                 return path.basename(self.calc_file)
         with open(self.calc_file, 'w') as file:
             file.write(self.ascii_2_py(args['contents'], True))
-        return path.basename(self.calc_file)
+        webview.set_title('docal - ' + self.calc_file)
 
     def select_doc_file(self, direc=None):
         if direc is None:
@@ -172,4 +172,4 @@ class Api():
         print(what)
 
 
-webview.create_window('docal', 'assets/index.html', js_api=Api())
+webview.create_window('docal', 'assets/index.html', js_api=Api(), width=1200, height=700)
