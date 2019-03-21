@@ -1,0 +1,528 @@
+% -beta
+\documentclass[12pt]{article}
+\usepackage[colorlinks]{hyperref}
+\usepackage{booktabs, graphicx}
+\usepackage[margin=1.2in,a4paper] {geometry}
+\usepackage{amsmath}
+
+\begin{document}
+\title{docal Help}
+\author{K1DV5}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+\textbf{docal} lets you write what the procedure is supposed to be and takes
+care of the rest of the work like calculating the numbers, formatting them in
+scientific notation if needed, show the three steps of a calculation as
+necessary and output a beautiful content to a document file of your choice.
+
+\autoref{demo} provides a good introduction of what docal does. You write the
+input document and the calculations and docal produces the output document.
+
+\begin{figure} [ht]
+    \includegraphics[width=0.7\textwidth]{demo.pdf}
+    \caption{Demo}
+    \label{demo}
+\end{figure}
+
+You leave the places
+for the calculations by giving ``tags'' using the hashtag (from social
+networks) notation: \#[tagname] where [tagname] is a unique name for that place
+that the calculations will go.
+
+Then in the calculations, you refer to the places using the [tagname] preceding
+them with a single \# and giving the [tagname]. For example,
+
+\begin{verbatim}
+#sometag
+x = 10
+y = x^2
+\end{verbatim}
+
+will go to the place specified as \#sometag in the document.  When you're happy
+with the preview, click ``Send''. docal produces the output document inserting
+formatted, detailed calculations into the places of the tags.
+
+You can create a new document from docal but your word processing options such
+as creating figures, tables, headings, formatting paragraphs, etc. will be
+absent as those are not docal's intended use. Thus, for big documents, it is
+recommended to create the other parts of the document in the dedicated program
+and use tags for the calculations. But you can use only docal for simple
+worksheets.
+
+\section{Usage}
+
+The supported document types are Word and \LaTeX.
+
+Generally docal works with up to 3 files.
+\begin{description}
+    \setlength\itemsep{0pt}
+    \item[Input document:] A document file (Word or \LaTeX) in which you have
+        written the other content and put tags in the desired places
+    \item[Calculations file:] A file in which you write the calculations. It
+        can be saved, opened etc.
+    \item[Output document:] A document file that will be created by inserting
+        the calculations into the document file
+\end{description}
+
+Not all of them need to be given (see \nameref{overview}). But generally, you specify the
+input document name (the one containing the tags) and the output document name
+(the one you want as combined, final document). Then you write the calculations
+or optionally open a previously saved calculations file (you can save them.)
+The press `Send'. A document will be created with the output name that you gave.
+You can open both documents from within docal using the `Open' menu next to the
+names.
+
+While you write, you can insert options (see \nameref{options}) by typing them
+directly or using the options sidebar on the right.
+
+\subsection{Overview}
+\label{overview}
+
+The following are some points to consider.
+\begin{itemize}
+    \setlength\itemsep{0pt}
+    \item The input and output documents cannot be of different filetypes: If
+        the input is Word, the output must be Word.
+    \item If you leave the input document name blank, and the output document
+        name is given, docal will create a new document containing the
+        calculations with no additional content.
+    \item If you give the input document name and leave the output document
+        name blank, docal will insert the calculations into the document and
+        \begin{description}
+            \setlength\itemsep{0pt}
+            \item{For Word:} will save the resulting file by the name: [input
+                file name]-out.docx. If a file by that name already exists, it
+                overwrites it. \textbf{Be careful}.
+            \item{For \LaTeX:} will save the resulting file by the same name,
+                with the possibility of reversing (using the ``Clear tags'')
+                menu item.
+        \end{description}
+    \item If the two document names are the same,
+        \begin{description}
+            \setlength\itemsep{0pt}
+            \item{For Word:} The original file will be overwritten and the tag
+                places will be replaced by calculations. This may not be
+                desired as it will make rearranging the document more difficult
+                because many equations make Word slow, and the tags will be
+                lost. So \textbf{be careful}.
+            \item{For \LaTeX:} The original will be overwritten but the
+                operation is reversible (see above).
+        \end{description}
+    \item If there are more tags in the document than in the calculations, only
+        those in the calculations will be processed and the rest will be
+        ignored. If there are more tags in the calculations than in the
+        document, only those that are in the document will be processed and the
+        rest will be ignored. So try to keep a one to one correspondence for
+        best results.
+    \item If there is no tag in the document, the output document will be the
+        same as the input document.
+    \item If there are tags in the document, the first tag is implied in the
+        calculations, so if you only want to use one tag, you don't need to
+        specify it in the calculations. But you have to specify it in the
+        document to tell it where the calculations will go.
+    \item If you want to insert a \# character without confusing it for a tag
+        beginning, precede it with a backslash (\verb|\|), e.g.
+        \verb|\#twitter|
+    \item If there were log messages produced when you click `Send', a they
+        will appear in a message box. You can set the minimum log level to show
+        using the select box above the `Send' button.
+\end{itemize}
+
+\section{Calculations content}
+
+docal goes over the calculations line by line and the lines can be any of:
+
+\begin{itemize}
+    \setlength\itemsep{0pt}
+    \item Tags e.g. \verb|#sometag|
+    \item Calculated equations e.g. \verb|x = 5*y|
+    \item Calculated expressions, e.g. \verb|5*x| or \verb|1/5 + 8|
+    \item Text, eg. \verb|# The value of x|
+    \item Equations and expressions just for display, e.g. \verb|#$$ x = 5*y|
+    \item Comments (text that will not appear on the document) e.g.
+        \verb|## some comment|
+\end{itemize}
+
+\subsection{Tags}
+
+Tags are placeholders in the document and kind of titles in the calculations,
+where anything below them is supposed to be inserted in place of them in the
+document.  For example, take the following calculations:
+
+\begin{verbatim}
+#first
+x = 5
+y = 5*x
+#second
+z = x^2
+d = 3
+\end{verbatim}
+
+Now the two calculations under \#first will go to that tag in the document, and
+the other two under \#second will go to the place specified by \#second in the
+document.
+
+The tags can only be made up of:
+\begin{itemize}
+\setlength\itemsep{0pt}
+    \item The \# character to begin
+    \item No space between the \# character and the name or in between
+    \item Any combination of letters, the \_ character, and numbers. So
+        \#First, \#seCOnd2, \#step\_1 are valid but \# first, \#fi;rst are not
+        valid.
+\end{itemize}
+
+\subsection{Calculated Equations}
+
+These are the main contents. They are equations where the left hand side is a
+variable name and the right hand side is an expression.  The rules come from
+the underlying Python and are simplified as follow.
+
+\begin{itemize}
+    \setlength\itemsep{0pt}
+    \item There must be an equal sign between the right and left hand sides. It
+        cannot be other signs as $>, \leq$ etc. While this will not cause any
+        errors, the result might not be the intended one as it will be
+        evaluated as just an expression (see \nameref{expressions}).
+    \item The left hand side cannot be an expression like $x + 1 = 5 \times
+        10$. It can be a variable name. The variable name can only start with a
+        letter or the \_ character and the rest can also contain numbers. So
+        \verb|x_1, height, s1| are valid but \verb|9x, the height, 4 width| are
+        not valid. It can also be more than one variable but there have to be
+        corresponding values on the right side like \verb|x, y, z = 5, 8, 9|.
+    \item every operation must be explicitly written, there is nothing implied.
+        For example, to multiply 9 by x, we might be used to writing $9x$ but
+        this is invalid here. Write \verb|9*x| instead. Also, to use functions
+        like sin, sqrt, etc., enclose the values in brackets. So \verb|sin x|
+        is invalid but \verb|sin(x)| is valid.
+\end{itemize}
+
+\subsubsection{Variable Name Customization}
+
+Variable names can be extensively customized. You are not stuck with just
+letters and numbers like $x$.
+
+\begin{description}
+    \setlength\itemsep{0pt}
+    \item[Subscript, Superscript] These are widely used notations. To write a
+        subscript to a variable name, add the \_ character between. E.g.
+        \verb|x_1| will be $x_1$ in the document. To add a superscript, add
+        \_\_ between the main and the sub. E.g. \verb|x__t| will be $x^t$ in
+        the document. The nice thing is that this will not conflict with power
+        operations.
+    \item[Greek Letters] To insert Greek letters, just write their name, like
+        \verb|alpha| for $\alpha$ or \verb|Omega| for $\Omega$. For a full list
+        of the letters supported, see \nameref{greek}.
+    \item[Accents] To add accents, like dot on top, add \_ and the name of the
+        accent. E.g. \verb|V_dot| for $\dot{V}$ or \verb|A_hat| for $\hat{A}$.
+        For a full list of accents, see \nameref{accents}.
+    \item[Primes] To add prime signs, add \_ and ``[n]prime'', where [n] is the
+        number of the primes, up to three, not needed for one. E.g.
+        \verb|A_prime| for $A'$ or \verb|A_3prime| for $A'''$. You can refer to
+        \nameref{primes}.
+    \item[Special] These are simplified versions of some terms. Currently
+        supported are \verb|degC| for $^\circ\mathrm{C}$, \verb|degF| for
+        $^\circ\mathrm{F}$ and \verb|deg| for $^\circ$. You can refer to
+        \nameref{transformed}.
+\end{description}
+
+The above can be used to create complicated names like\\
+\verb|a_dot_beta_prime__t_tilde| for
+\[
+    \displaystyle {\dot{a}}_{{\beta}'}^{\tilde{t}}
+\]
+
+\subsubsection{Options}
+\label{options}
+
+The calculations can have options. Options are a way to customize the
+calculations.  They can be inserted after the equation by preceding them with
+the \# character, like:
+
+\begin{verbatim}
+x = 10 # [option],[option],...
+\end{verbatim}
+
+Where the [option] part is an option for that particular line.  As shown above,
+multiple options are separated with commas. The available options are:
+
+\begin{description}
+    \setlength\itemsep{0pt}
+    \item[Unit] You can write units and they will appear next to the number
+        whenever the variable is referred. To insert a unit, enter it as a
+        correct expression, meaning don't write \verb|W/m^2-K| but write
+        \verb|W/(m^2*K)|. Simple evaluation of units is also supported, like
+        $\mathrm{10\,m/5\,s=2m/s}$ and cancelling out, like
+        $\mathrm{10\,m^2/5\,m=2\,m}$. But the unit that appears might not be
+        the intended one as there can be many combinations of the same unit,
+        like $\mathrm{Pa = N/m^2 = kg/s^2}$. In that case, you can override it
+        with the intended unit. Once the intended unit is given, subsequent
+        calculations having an equivalent unit will use that unit, unless they
+        are overridden again.
+
+        \begin{verbatim}
+        x = 5 # m/s
+        \end{verbatim}
+
+    \item[Note] A note is some text after the last step in the calculation. It
+        can be handy to say something right after the result. To insert a note,
+        precede it with an additional \# character and write what you want. An
+        example with a unit and a note
+
+        \begin{verbatim}
+        y = 2/x # m^2, #...Ans
+        \end{verbatim}
+
+        Where the first \# character signifies the start of options entry and
+        the second one signifies the note entry.
+
+    \item[Display or Inline] There are two modes of equations and expressions:
+        in-line and display. The in-line equations are those that flow with
+        surrounding text in the paragraph, like: $x = y + 2$. But displayed
+        equations are those that stand on their own in the middle like:
+
+        \[
+            x = y + 2
+        \]
+
+        To make the equation in-line, the option is a single \$ sign. For
+        display, double the sign, \$\$. The default mode is display. The
+        following is an in-line equation.
+
+        \begin{verbatim}
+        x = 5 + y #$
+        \end{verbatim}
+
+    \item[Vertical or Horizontal] When there is more than one step, the
+        subsequent steps are entered below the previous, like
+        \[
+            \begin{aligned}
+                x &= 5 + y\\
+                  &= 5 + 5\\
+                  &= 10
+            \end{aligned}
+        \]
+    But it might be desired that the steps go horizontally, like
+    \[
+        x = 5+y = 5+5 = 10
+    \]
+    To control this, use the hyphen character (-) for horizontal and the pipe
+    character (\verb+|+, located above the Enter key, holding Shift) for
+    vertical.
+
+    \item[Steps] There are at most three steps to a calculation:
+        \begin{enumerate}
+            \setlength\itemsep{0pt}
+            \item The one with the formula to be evaluated\\ $x = y + z$
+            \item The formula with the variables substituted with their
+                values\\ $=10+5$
+            \item The answer\\ $15$
+        \end{enumerate}
+
+        But all of them may not be desired, maybe only the answer is desired.
+        To include only some steps, include the step numbers of the desired
+        ones. For example, \verb|x = y + z #13| will include steps 1 and 3,
+        removing the middle step. \verb|x = y + z #3, m| will only include the
+        answer, giving it m as its unit.
+
+    \item[Hide] To hide a calculation but still evaluate it, include the ;
+        character in the options. This can be used to set some constants. E.g.
+        \verb|R_u = 8.31447 #kJ/(kmol*K), ;| evaluates the equation, with the
+        unit, and the constant can be used later, but this equation will not be
+        in the document.
+
+\end{description}
+
+\subsection{Text}
+
+Normal paragraphs can be written as text. To avoid mixing the text with the
+calculations, \# characters at line beginnings are necessary. And lines with no
+empty lines between them are treated as they are in the same paragraph. To
+separate paragraphs, use empty lines.  For example, the following will be taken
+as two paragraphs
+
+\begin{verbatim}
+# Some text in the first paragraph
+# and some other text in the same paragraph
+
+# Text in a new paragraph
+# and some additional content
+\end{verbatim}
+
+An important feature in the text is that values assigned before it can be
+referred by using the tag notation.
+
+\begin{verbatim}
+x = 10
+
+# since the value of x is #x, ...
+\end{verbatim}
+
+\subsection{Displayed Equations and Expressions}
+
+These are equations that will not be evaluated. Since they are not evaluated,
+they can be flexible. The left side can be an expression. Also, a long equation
+can be broken to a new line. This can be handy to show some procedure.
+
+Example usage:
+\begin{verbatim}
+#$$ 5*x+9=9*y |=9*sin(10) |=9*0.75 |=128
+\end{verbatim}
+
+will come out like:
+\[
+    \begin{aligned}
+        5\,x + 9 &=9\, y\\
+                 &=9\, \sin{10}\\
+                 &=9\times 0.75\\
+                 &=128
+    \end{aligned}
+\]
+
+There are two options for equations and expressions: in-line and displayed. The
+in-line equations are those that flow with surrounding text in the paragraph,
+like: $x = y + 2$. But displayed equations are those that stand on their own in
+the middle like:
+
+\[
+    x = y + 2
+\]
+
+To make the in-line equations and expressions flow with the text around them,
+insert them between lines supposed to be in the same paragraph, and use a
+single \$ sign in the beggining, like so:
+
+\begin{verbatim}
+# Some text
+#$ x = 5 + 2
+# Some other text
+\end{verbatim}
+
+\subsection{Calculated Expressions}
+\label{expressions}
+
+These are not very much different from the calculated equations except the fact
+that they are not equations and thus their result is not retained for later
+use. The same options apply to them.  They can be used when explaining
+something, like
+
+\begin{verbatim}
+# Since the value of #x is less than
+15 + x #m,$
+# then...
+\end{verbatim}
+
+\subsection{Comments}
+
+Comments are a way to enter text that will not be part of the document or the
+calculations but are written to explain something in the calculations. Their
+existence (or absence thereof) will not have any effect on the operations. To
+insert a comment line, begin with two hash characters like:
+
+\begin{verbatim}
+c = 5
+## this is a comment
+v = 10*c
+\end{verbatim}
+
+\section{Appendix}
+
+\subsection{Supported Greek Letters}
+\label{greek}
+
+\begin{tabular}{ll}
+    \toprule
+    Letter & Name\\
+    \midrule
+    $\alpha$      & \verb|alpha|\\
+    $\nu$         & \verb|nu|\\
+    $\beta$       & \verb|beta|\\
+    $\xi$         & \verb|xi|\\
+    $\Xi$         & \verb|Xi|\\
+    $\gamma$      & \verb|gamma|\\
+    $\Gamma$      & \verb|Gamma|\\
+    $\delta$      & \verb|delta|\\
+    $\Delta$      & \verb|Delta|\\
+    $\pi$         & \verb|pi|\\
+    $\Pi$         & \verb|Pi|\\
+    $\epsilon$    & \verb|epsilon|\\
+    $\varepsilon$ & \verb|varepsilon|\\
+    $\rho$        & \verb|rho|\\
+    $\varrho$     & \verb|varrho|\\
+    $\zeta$       & \verb|zeta|\\
+    $\sigma$      & \verb|sigma|\\
+    $\Sigma$      & \verb|Sigma|\\
+    $\eta$        & \verb|eta|\\
+    $\tau$        & \verb|tau|\\
+    $\theta$      & \verb|theta|\\
+    $\vartheta$   & \verb|vartheta|\\
+    $\Theta$      & \verb|Theta|\\
+    $\upsilon$    & \verb|upsilon|\\
+    $\Upsilon$    & \verb|Upsilon|\\
+    $\iota$       & \verb|iota|\\
+    $\phi$        & \verb|phi|\\
+    $\varphi$     & \verb|varphi|\\
+    $\Phi$        & \verb|Phi|\\
+    $\kappa$      & \verb|kappa|\\
+    $\chi$        & \verb|chi|\\
+    $\lambda$     & \verb|lambda|\\
+    $\Lambda$     & \verb|Lambda|\\
+    $\psi$        & \verb|psi|\\
+    $\Psi$        & \verb|Psi|\\
+    $\mu$         & \verb|mu|\\
+    $\omega$      & \verb|omega|\\
+    $\Omega$      & \verb|Omega|\\
+    \bottomrule
+\end{tabular}
+
+\subsection{Supported Accents}
+\label{accents}
+
+\begin{tabular}{lll}
+    \toprule
+    Name & Example & Usage\\
+    \midrule
+    \verb|hat|    & $\hat{a}$    & \verb|a_hat|\\
+    \verb|check|  & $\check{a}$  & \verb|a_check|\\
+    \verb|breve|  & $\breve{a}$  & \verb|a_breve|\\
+    \verb|acute|  & $\acute{a}$  & \verb|a_acute|\\
+    \verb|grave|  & $\grave{a}$  & \verb|a_grave|\\
+    \verb|tilde|  & $\tilde{a}$  & \verb|a_tilde|\\
+    \verb|bar|    & $\bar{a}$    & \verb|a_bar|\\
+    \verb|vec|    & $\vec{a}$    & \verb|a_vec|\\
+    \verb|dot|    & $\dot{a}$    & \verb|a_dot|\\
+    \verb|ddot|   & $\ddot{a}$   & \verb|a_ddot|\\
+    \bottomrule
+\end{tabular}
+
+\subsection{Supported Primes}
+\label{primes}
+
+\begin{tabular}{lll}
+    \toprule
+    Name & Example & Usage\\
+    \midrule
+    \verb|prime|    & $a'$    & \verb|a_prime|\\
+    \verb|2prime|  & $a''$  & \verb|a_2prime|\\
+    \verb|3prime|  & $a'''$  & \verb|a_3prime|\\
+    \bottomrule
+\end{tabular}
+
+\subsection{Special Transformed}
+\label{transformed}
+
+\begin{tabular}{ll}
+    \toprule
+    Name & Transformed\\
+    \midrule
+    \verb|degC|    & $^\circ\mathrm{C}$\\
+    \verb|degF|  & $^\circ\mathrm{F}$\\
+    \verb|deg|  & $^\circ$\\
+    \bottomrule
+\end{tabular}
+
+
+\end{document}
