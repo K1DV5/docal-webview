@@ -54,7 +54,6 @@ html, body {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             File
-                            <span class="badge badge-info" id="calc-file">Untitled.py</span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" id="toolbar-new">New</a>
@@ -95,19 +94,19 @@ html, body {
                     <button class="del-btn btn btn-sm btn-danger">Delete</button>
                 </div>
                 <!-- <form class="form-inline my-2 my-md-0"> -->
-                <!--     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
-                <!--     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+                <!--     <input class="form-control mr-md-2" type="search" placeholder="Search" aria-label="Search"> -->
+                <!--     <button class="btn btn-outline-success my-2 my-md-0" type="submit">Search</button> -->
                 <!-- </form> -->
             </div>
         </nav>
         <div class="container-fluid">
             <div class="row h-100">
-                <div class="col-sm-3">
+                <div class="col-md-2">
                     <div class="rounded border p-2 my-2">
                         <div>
                             <label for=doc-in">Document input</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="doc-in" placeholder="Type the name or..." aria-describedby="doc-in-help">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" id="doc-in" placeholder="Path/to/file">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary doc-in-button" type="button">Browse</button>
                                     <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -120,14 +119,11 @@ html, body {
                                     </div>
                                 </div>
                             </div>
-                            <small id="doc-in-help" class="form-text text-muted">
-                                The document that you wrote and contains the tags to be replaced.
-                            </small>
                         </div>
                         <div class="mt-5">
                             <label for=doc-out">Document output</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="doc-out" placeholder="Type the name or..." aria-describedby="doc-out-help">
+                            <div class="input-group mb-3 input-group-sm">
+                                <input type="text" class="form-control" id="doc-out" placeholder="Path/to/file">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary doc-out-button" type="button">Browse</button>
                                     <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -139,16 +135,13 @@ html, body {
                                     </div>
                                 </div>
                             </div>
-                            <small id="doc-out-help" class="form-text text-muted">
-                                The document that you want as the output. If you make this the same as the input, you might lose the original
-                            </small>
                         </div>
-                        <div class="mt-5 input-group">
-                            <label for="log-level" class="col-sm-5">Log level</label>
-                            <div class="col-sm-7">
-                                <select class="custom-select log-level" id="log-level">
-                                    <option value="WARNING" selected>Warning</option>
-                                    <option value="ERROR">Error</option>
+                        <div class="mt-5 input-group input-group-sm">
+                            <label for="log-level">Minimum log level</label>
+                            <div>
+                                <select class="custom-select log-level custom-select-sm" id="log-level">
+                                    <option value="WARNING" selected>Warnings</option>
+                                    <option value="ERROR">Errors</option>
                                     <option value="INFO">Info</option>
                                 </select>
                             </div>
@@ -160,10 +153,10 @@ html, body {
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8 h-100">
+                <div class="col-md-8 h-100">
                     <div id="worksheet"></div>
                 </div>
-                <div class="col-sm-1 h-100 calc-entry-options">
+                <div class="col-md-2 h-100 calc-entry-options">
                     <div class="mb-3">
                         Options
                     </div>

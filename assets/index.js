@@ -4,16 +4,14 @@
 "use strict"
 
 function newCalcFile() {
-    pywebview.api.new_calc_file().then(function(calc) {
-        $('#calc-file').text(calc)
+    pywebview.api.new_calc_file().then(function() {
         str2Elem([''])
     })
 }
 
 function openCalcFile() {
-    pywebview.api.open_calc_file().then(function(calc) {
-        $('#calc-file').text(calc.file)
-        str2Elem(calc.content)
+    pywebview.api.open_calc_file().then(function(content) {
+        str2Elem(content)
     })
 }
 
@@ -21,10 +19,6 @@ function saveCalcFile(saveas) {
     pywebview.api.save_calc_file({
         saveas: saveas,
         contents: elem2Str()
-    }).then(function(resp) {
-        if (resp !== undefined) {
-            $('#calc-file').text(resp)
-        }
     })
 }
 
