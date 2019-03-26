@@ -95,7 +95,7 @@ function renderEntry(eve) {
         if (input.value.trim()) {
             let lineNo = input.value.slice(0, input.selectionStart).split('\n').length - 1
             let currentLine = input.value.split('\n')[lineNo]
-            if (currentLine.match(/^\s*[^#]+/)) {
+            if (eve.ctrlKey || currentLine.match(/^\s*[^#]+/)) {
                 let div = eve.currentTarget.parentElement
                 let paraDiv = div.querySelector('div')
                 // only if there is something meaningful
@@ -110,11 +110,14 @@ function renderEntry(eve) {
                 eve.preventDefault()
             }
         }
-    } else if (eve.key == 'Escape') {
+    } else if (eve.key == 'Esc') {
+        // ignore the editting one and close it
         let input = eve.currentTarget
-        if (input.value.trim()) {
+        // work only if there is something in the div, to avoid unclickable div
+        let paraDiv = input.parentElement.querySelector('div')
+        if (paraDiv.children.length) {
             input.style.display = 'none'
-            input.parentElement.querySelector('div').style.display = 'block'
+            paraDiv.style.display = 'block'
             eve.preventDefault()
         }
     }

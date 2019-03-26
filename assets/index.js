@@ -11,7 +11,9 @@ function newCalcFile() {
 
 function openCalcFile() {
     pywebview.api.open_calc_file().then(function(content) {
-        str2Elem(content)
+        if (content) {
+            str2Elem(content)
+        }
     })
 }
 
@@ -69,15 +71,18 @@ $('#toolbar-saveas')    .click(function() {saveCalcFile(true)})
 $('#toolbar-exit')      .click(function() {pywebview.api.quit()})
 $('#toolbar-help')      .click(function() {pywebview.api.open_help()})
 $('#toolbar-about')     .click(function() {
+    let docalVersion = '1.0.3' // REPLACE THIS (to be replaced by the build script)
     let about = document.createElement('div')
-    let lines = 'DoCaL 0.4.0\nPython 3.7.1\n\nNew releases can be downloaded from:\nhttps://github.com/K1DV5/DoCaL/releases \n\n© 2019 K1DV5'.split('\n\n')
-    for (let i = 0; i < lines.length; i++) {
-        let p = document.createElement('p')
-        p.textContent = lines[i]
-        about.appendChild(p)
-    }
+    about.innerHTML = 
+    '<h3>docal <h6>' + docalVersion + '</h6></h3> \
+    <p>Python 3.7.1</p> \
+    <p>New releases can be downloaded from:<br/> \
+    <span style="color: blue;">https://github.com/K1DV5/docal-webview/releases</p> \
+    <p>© 2019 K1DV5</p> \
+    '
     messageBox('About', about)
 })
+
 $('.doc-in-button')     .click(function() {selectDocFile('#doc-in')})
 $('.doc-out-button')    .click(function() {selectDocFile('#doc-out')})
 $('.doc-in-open')       .click(function() {pywebview.api.open_document([$('#doc-in').val(), false])})
