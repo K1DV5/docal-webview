@@ -114,7 +114,7 @@ class Api():
             doc.send(self.ascii_2_py(data['calc'], True))
             doc.write(data['out'])
         except Exception as err:
-            return ['Error', str(err)]
+            return ['Error', [str(err)]]
         else:
             self.doc_in = doc.document_file.infile
             self.doc_out = doc.document_file.outfile
@@ -172,4 +172,4 @@ class Api():
         print(what)
 
 
-webview.create_window('docal', 'assets/index.html', js_api=Api(), width=1200, height=700)
+webview.create_window('docal', 'assets/index.html', js_api=Api(), width=1200, height=700, debug=True)
