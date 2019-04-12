@@ -62,6 +62,6 @@ def build_zip():
 # -----------
 
 sync_version()
-run(args)
-copy_assets()
-build_zip()
+if run(args).returncode == 0:
+    copy_assets()
+    build_zip()

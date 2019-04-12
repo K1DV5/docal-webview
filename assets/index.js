@@ -71,7 +71,7 @@ $('#toolbar-saveas')    .click(function() {saveCalcFile(true)})
 $('#toolbar-exit')      .click(function() {pywebview.api.quit()})
 $('#toolbar-help')      .click(function() {pywebview.api.open_help()})
 $('#toolbar-about')     .click(function() {
-    let docalVersion = '1.0.3' // REPLACE THIS (to be replaced by the build script)
+    let docalVersion = '1.0.4' // REPLACE THIS (to be replaced by the build script)
     let about = document.createElement('div')
     about.innerHTML = 
     '<h3>docal <h6>' + docalVersion + '</h6></h3> \
