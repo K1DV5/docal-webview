@@ -64,13 +64,21 @@ function addEntry(type) {
 function moveEntry(eve) {
     let buttonClasses = eve.currentTarget.classList
     let div = currentFocus
-    let worksheet = document.getElementById('worksheet')
-    if (buttonClasses.contains('move-up')) {
-        let moved = div.previousElementSibling
-        // if there is one before
-        if (moved) {
-            worksheet.removeChild(moved)
-            div.insertAdjacentElement('afterend', moved)
+    if (div) {
+        if (buttonClasses.contains('move-up')) {
+            let moved = div.previousElementSibling
+            // if there is one before
+            if (moved) {
+                worksheet.removeChild(moved)
+                div.insertAdjacentElement('afterend', moved)
+            }
+        } else {
+            let moved = div.nextElementSibling
+            // if there is one after
+            if (moved) {
+                worksheet.removeChild(moved)
+                div.insertAdjacentElement('beforebegin', moved)
+            }
         }
     } else {
         let moved = div.nextElementSibling
