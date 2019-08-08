@@ -47,25 +47,18 @@ function delEntry() {
     }
 }
 
-function addEntry(eve, nextTo) {
-    let div = document.createElement('div')
-    let eveTarget = eve.currentTarget
-    let worksheet = document.getElementById('worksheet')
+function addEntry(type) {
+    if (type == 'excel') {
+        var div = newXlDiv()
+    } else {
+        var div = newDiv('', type)
+    }
     if (worksheet.children.length && currentFocus) {
-        if (eveTarget.classList.contains('add-bel') || nextTo) {
-            // render the current one
-            renderPara([currentFocus.querySelector('div')])
-            currentFocus.insertAdjacentElement('afterend', div)
-        } else {
-            renderPara([currentFocus.querySelector('div')])
-            currentFocus.insertAdjacentElement('beforebegin', div)
-        }
+        currentFocus.insertAdjacentElement('afterend', div)
     } else {
         worksheet.appendChild(div)
     }
-    configNewDiv(div, '', true)
     focusEntry(div, div.querySelector('.input'))
-    eve.preventDefault()
 }
 
 function moveEntry(eve) {
