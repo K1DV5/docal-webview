@@ -43,6 +43,33 @@ def touch_js():
         js.write(new)
 
 
+def create_installer():
+    '''update the version and the files in the installer'''
+
+    installer_name = 'installer-script.nsi'
+    file_commands = []
+    dir_commands = []
+    file_list = glob(path.join(DIR, '**', '*'), recursive=True)
+    for p in file_list:
+        inst_path = f'$INSTDIR{p[len(DIR):]}'
+        if path.isdir(p):
+            dir_commands.append(f'  RMDir "{inst_path}"')
+        else:
+            file_commands.append(f'  Delete "{inst_path}"')
+    # this will ensure that deletion will start from the inner most folder
+    dir_commands.sort(key=lambda x: x.count(pathsep), reverse=True)
+    # with the installer script
+    file = path.relpath(installer_name)
+    with open(file) as nsi:
+        old = nsi.read()
+    new = re.sub(r'(?<=!define DOCAL_VERSION ")[\d.]*?(?=")', VERSION, old)
+    commands = '\n'.join(file_commands + dir_commands).replace('\\', r'\\')
+    new = re.sub(r'(?ms)(?<=<INSTALLEDFILES>\n).*?(?= *; </INSTALLEDFILES>)', commands, new)
+    with open(file, 'w', encoding='utf-8') as nsi:
+        nsi.write(new)
+    run(['C:\\Programs\\NSIS\\makensis.exe', installer_name])
+
+
 def copy_assets():
     if path.exists(ASSETS_DIR):
         rmtree(ASSETS_DIR)
@@ -65,7 +92,8 @@ def build_zip():
 # TASKS:
 # -----------
 
-sync_version()
-if run(args).returncode == 0:
-    copy_assets()
-    build_zip()
+# touch_js()
+# if run(args).returncode == 0:
+#     copy_assets()
+#     build_zip()
+#     create_installer()
