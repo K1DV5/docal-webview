@@ -109,9 +109,10 @@ class Api():
 
     def send_calcs(self, data):
         try:
-            doc = document(data['in'], data['clear'], data['level'])
-            doc.send(self.ascii_2_py(data['calc'], True))
-            doc.write(data['out'])
+            doc = document(data['in'], data['out'], data['clear'], data['level'])
+            for chunk in data['calc']:
+                doc.send(chunk[1], chunk[0])
+            doc.write()
         except Exception as err:
             return ['Error', [str(err)]]
         else:
