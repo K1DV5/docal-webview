@@ -67,9 +67,9 @@ $('#toolbar-saveas')    .click(function() {saveCalcFile(true)})
 $('#toolbar-exit')      .click(function() {pywebview.api.quit()})
 $('#toolbar-help')      .click(function() {pywebview.api.open_help()})
 $('#toolbar-about')     .click(function() {
-    let docalVersion = '1.0.4' // REPLACE THIS (to be replaced by the build script)
+    let docalVersion = '2.0.0' // REPLACE THIS (to be replaced by the build script)
     let about = document.createElement('div')
-    about.innerHTML = 
+    about.innerHTML =
     '<h3>docal <h6>' + docalVersion + '</h6></h3> \
     <p>Python 3.7.1</p> \
     <p>New releases can be downloaded from:<br/> \
@@ -85,5 +85,15 @@ $('.doc-in-open')       .click(function() {pywebview.api.open_document([$('#doc-
 $('.doc-out-open')      .click(function() {pywebview.api.open_document([$('#doc-out').val(), true])})
 $('.doc-clear')         .click(function() {sendCalcs(true)})
 $('.send-calcs')        .click(function(eve) {sendCalcs(false); eve.preventDefault();})
-
+$('.options-menu')      .click(function(eve) {eve.stopPropagation()})
 $('#calc-content')      .keydown(function(eve) {if (eve.key == 'Tab') {$(this).val($(this).val() + '\t'); eve.preventDefault()}})
+// for the insert tabs
+$('#myTab a')           .click(function(e) {e.preventDefault(); $(this).tab('show')})
+
+// startup prep
+openCalcFile(1)
+prepClickInsert()
+document.querySelector('.insert-menu-btn')
+for (let i = 0; i < inputOnly.length; i++) {
+    inputOnly[i].disabled = true
+}
