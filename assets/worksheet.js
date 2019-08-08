@@ -16,6 +16,10 @@ function focusEntry(div, input) {
     div.classList.add('border-primary')
     if (input) {
         input.focus()
+        currentFocusInput = input
+        for (let i = 0; i < inputOnly.length; i++) {
+            inputOnly[i].disabled = false
+        }
     }
 }
 
