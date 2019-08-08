@@ -12,9 +12,13 @@ from docal.__main__ import args as cli_args
 
 class Api():
     def __init__(self):
-        self.default_calc_file = 'Untitled.py'
-        self.calc_file = self.default_calc_file
-        self.calc_types = ('Calculation files (*.py)', 'All files (*.*)')
+        self.default_calc_file = 'Untitled.dcl'
+        if cli_args.script:
+            self.calc_file = cli_args.script
+            # webview.evaluate_js(f'fromFile({self.open_calc_file(self.calc_file)})')
+        else:
+            self.calc_file = self.default_calc_file
+        self.calc_types = ('docal calculation files (*.dcl)', 'All files (*.*)')
         self.doc_types = ('Document files (*.tex;*.docx)', 'All files (*.*)')
         self.working_dict = {}
         self.process = document().process_content
