@@ -165,4 +165,4 @@ class Api():
         print(what)
 
 
-webview.create_window('docal', 'assets/index.html', js_api=Api(), width=1200, height=700, debug=True)
+webview.create_window('docal', 'assets/index.html', js_api=Api(), width=1100, height=600)
