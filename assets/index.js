@@ -1,27 +1,28 @@
 // imported from worksheet.js:
-// str2Elem()
-// elem2Str()
+// fromFile()
+// toFile()
+// prepClickInsert()
 "use strict"
 
 function newCalcFile() {
     pywebview.api.new_calc_file().then(function() {
-        str2Elem([''])
+        fromFile({})
     })
 }
 
-function openCalcFile() {
-    pywebview.api.open_calc_file().then(function(content) {
+function openCalcFile(arg) {
+    // pass 1 to read the command line argument
+    pywebview.api.open_calc_file(arg? 1 : undefined).then(function(content) {
         if (content) {
-            str2Elem(content)
+            fromFile(content)
         }
     })
 }
 
 function saveCalcFile(saveas) {
-    pywebview.api.save_calc_file({
-        saveas: saveas,
-        contents: elem2Str()
-    })
+    let data = toFile()
+    data['saveas'] = saveas
+    pywebview.api.save_calc_file(data)
 }
 
 // general document file selector
