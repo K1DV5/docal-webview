@@ -1,8 +1,11 @@
 "use strict";
-// the current working para div (pywebview's promise only manipulates globals!)
-var currentParaDivs;
+
 var currentFocus;
 var currentFocusInput;
+var currentParaDivs;
+var scrollTop;
+const worksheet = document.getElementById('worksheet')
+const inputOnly = document.querySelector('.insert-menu-btn')
 const optionsForm = document.querySelector('.calc-entry-options')
 
 function focusEntry(div, input) {
