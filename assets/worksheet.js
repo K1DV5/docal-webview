@@ -292,14 +292,17 @@ function excelAttrib(div, attrib) {
 }
 
 function renderPara(paraDivs, flush) {
+    // because pywebview only wants globals
     currentParaDivs = paraDivs
     // whether the previously defined vars are flushed
     flush = flush || paraDivs.length > 1
     let inputs = [flush, []]
     for (let i = 0; i < currentParaDivs.length; i++) {
-        let input = currentParaDivs[i].parentElement.querySelector('.input');
-        if (input.value.trim()) {
-            inputs[1].push(input.value)
+        let div = currentParaDivs[i].parentElement
+        let input = div.querySelector('.input');
+        let data = entryData(div)
+        if (data[1]) {
+            inputs[1].push(data)
             // hide buttons and input
             input.style.display = 'none';
             currentParaDivs[i].style.display = 'block'
@@ -309,7 +312,9 @@ function renderPara(paraDivs, flush) {
         }
     }
     // process them through python
-    pywebview.api.process_and_tex(inputs).then(function(divs) {
+    pywebview.api.render(inputs).then(function(divs) {
+    // {let divs = [['\\[\\n7\\n\\]\\n']]
+        // pywebview.api.log(inputs)
         for (let i = 0; i < divs.length; i++) {
             if (divs[i] != 0) {
                 // remove current content
@@ -326,71 +331,95 @@ function renderPara(paraDivs, flush) {
             }
         }
     })
+    // }
 }
 
-// from the string (from file) to the worksheet
-function str2Elem(chunks) {
-    let worksheet = document.getElementById('worksheet')
-    // remove current content
-    worksheet.innerHTML = ''
-    for (let i = 0; i < chunks.length; i++) {
-        let div = document.createElement('div')
-        worksheet.appendChild(div)
-        configNewDiv(div, chunks[i].replace(/\\n/g, '\n'), true)
-    }
-}
-
-// from the worksheet to string (for file)
-function elem2Str() {
-    let entryDivs = document.querySelector('#worksheet').children
-    let calc = ''
-    for (let i = 0; i < entryDivs.length; i++) {
-        calc += '\n' + entryDivs[i].querySelector('.input').value
-    }
-    return calc
-}
-
-function insertOptions() {
-    if (currentFocusInput && currentFocusInput.style.display == 'block') {
+function insertOptions(eve) {
+    if (currentFocusInput && currentFocusInput.style.display == 'block' && currentFocusInput.parentElement == currentFocus) {
         let input = currentFocusInput
         let lineNo = input.value.slice(0, input.selectionStart).split('\n').length - 1
         let lines = input.value.split('\n')
         let baseLine = lines[lineNo].split('#')[0]
         if (baseLine) {
-            let options = []
-            let steps = ''
-            let optionInputs = optionsForm.querySelectorAll('.option')
-            for (let i = 0; i < optionInputs.length; i++) {
-                let current = optionInputs[i]
-                let currentClasses = current.classList
-                if (currentClasses.contains('option-unit') && current.value) {
-                    options.push(current.value)
-                } else if (currentClasses.contains('option-note') && current.value) {
-                    options.push('# ' + current.value)
-                } else if (currentClasses.contains('option-step') && current.checked) {
-                    steps += current.value
-                } else if (currentClasses.contains('option-inline') && current.checked) {
-                    options.push('$')
-                } else if (currentClasses.contains('option-horizontal') && current.checked) {
-                    options.push('-')
-                } else if (currentClasses.contains('option-hidden') && current.checked) {
-                    options.push(';')
+            if (eve.currentTarget.classList.contains('insert-options-btn')) {
+                let options = []
+                let steps = ''
+                let optionInputs = optionsForm.querySelectorAll('.option')
+                for (let i = 0; i < optionInputs.length; i++) {
+                    let current = optionInputs[i]
+                    let currentClasses = current.classList
+                    if (currentClasses.contains('option-unit') && current.value) {
+                        options.push(current.value)
+                    } else if (currentClasses.contains('option-note') && current.value) {
+                        options.push('# ' + current.value)
+                    } else if (currentClasses.contains('option-step') && current.checked) {
+                        steps += current.value
+                    } else if (currentClasses.contains('option-inline') && current.checked) {
+                        options.push('$')
+                    } else if (currentClasses.contains('option-horizontal') && current.checked) {
+                        options.push('-')
+                    } else if (currentClasses.contains('option-hidden') && current.checked) {
+                        options.push(';')
+                    }
                 }
+                if (steps) {
+                    options.push(steps)
+                }
+                lines[lineNo] = baseLine.trim() + (options.length ? ' # ' + options.join(', ') : '')
+            } else {
+                lines[lineNo] = baseLine.trim()
             }
-            if (steps) {
-                options.push(steps)
-            }
-            lines[lineNo] = lines[lineNo].split('#')[0].trim() + (options.length ? ' # ' + options.join(', ') : '')
             input.value = lines.join('\n')
         }
     }
 }
 
-document.querySelector('.add-bel').addEventListener('click', addEntry)
-document.querySelector('.add-abv').addEventListener('click', addEntry)
+// from the string (from file) to the worksheet
+function fromFile(data) {
+    document.querySelector('#doc-in').value = data['in'] ? data['in'] : ''
+    document.querySelector('#doc-out').value = data['out'] ? data['out'] : ''
+    if (data['level']) {
+        document.querySelector('.log-level').value = data['level']
+    }
+    let chunks = data['calc']
+    if (chunks) {
+        // remove current content
+        worksheet.innerHTML = ''
+        for (let i = 0; i < chunks.length; i++) {
+            if (chunks[i][0] == 'excel') {
+                worksheet.appendChild(newXlDiv(chunks[i][1]))
+            } else {
+                var div = newDiv(chunks[i][1].replace(/\\n/g, '\n'), chunks[i][0])
+                worksheet.appendChild(div)
+                resizeEntry(div.querySelector('.input'))
+            }
+        }
+        let firstDiv = worksheet.children[0]
+        focusEntry(firstDiv, firstDiv.querySelector('.input'))
+    }
+}
+
+// from the worksheet to string (for file)
+function toFile() {
+    let entryDivs = worksheet.children
+    let calc = []
+    for (let i = 0; i < entryDivs.length; i++) {
+        calc.push(entryData(entryDivs[i]))
+    }
+    return {
+        'in': document.querySelector('#doc-in').value,
+        'calc': calc,
+        'out': document.querySelector('#doc-out').value,
+        'level': document.querySelector('.log-level').value,
+    }
+}
+
+document.querySelector('.add-btn').addEventListener('click', function() {addEntry('ascii')})
+document.querySelector('.add-btn-xl').addEventListener('click', function() {addEntry('excel')})
+document.querySelector('.add-btn-py').addEventListener('click', function() {addEntry('python')})
+document.querySelector('.render-btn').addEventListener('click', renderEntry)
 document.querySelector('.move-up').addEventListener('click', moveEntry)
 document.querySelector('.move-dn').addEventListener('click', moveEntry)
 document.querySelector('.del-btn').addEventListener('click', delEntry)
-document.querySelector('.calc-entry-options textarea').addEventListener('input', resizeEntry)
 document.querySelector('.insert-options-btn').addEventListener('click', insertOptions)
-str2Elem([''])
+document.querySelector('.clear-options-btn').addEventListener('click', insertOptions)
