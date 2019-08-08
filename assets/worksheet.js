@@ -136,6 +136,88 @@ function resizeEntry(input) {
     scrollTop = worksheet.scrollTop
     input.style.height = 'auto'
     input.style.height = input.scrollHeight + 'px'
+    worksheet.scrollTop = scrollTop
+}
+
+
+function newDiv(content, type) {
+    let div = document.createElement('div')
+    // config div
+    div.className = 'rounded border my-1 p-1 type-' + type
+    div.tabIndex = '0'
+    div.addEventListener('focus', function() {focusEntry(div)})
+    div.addEventListener('dblclick', editEntry)
+    div.innerHTML = '<textarea placeholder="' + (type == 'ascii' ? '' : '## ') + 'Type your calculations here.' + '" class="form-control input" style="display: block">' + content + '</textarea><div style="display: none;" class="render"></div>'
+    let input = div.children[0]
+    let paraDiv = div.children[1]
+    input.addEventListener('input', function() {resizeEntry(input)})
+    input.addEventListener('keypress', renderEntry)
+    input.addEventListener('focus', function() {currentFocusInput = input; focusEntry(div)})
+    // configure paraDiv
+    paraDiv.addEventListener('click', function () {focusEntry(div)})
+    return div
+}
+
+function newXlDiv(data) {
+    let div = document.createElement('div')
+    div.className = 'rounded border my-1 p-1 type-excel'
+    div.addEventListener('dblclick', editEntry)
+
+    div.innerHTML = [
+        '<div class="input container-fluid">',
+        '<div class="row">',
+        '    <div class="col-sm-6 px-0">',
+        '        <label for="xl-file">Excel file</label>',
+        '        <div class="input-group input-group-sm">',
+        '            <input type="text" class="form-control" id="xl-file" placeholder="Path/to/file">',
+        '            <div class="input-group-append">',
+        '                <button class="btn btn-outline-secondary xl-browse" type="button">Browse</button>',
+        '                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+        '                    <span class="sr-only">Toggle Dropdown</span>',
+        '                </button>',
+        '                <div class="dropdown-menu">',
+        '                    <a class="dropdown-item xl-browse">Browse</a>',
+        '                    <a class="dropdown-item xl-open">Open</a>',
+        '                </div>',
+        '            </div>',
+        '        </div>',
+        '    </div>',
+        '    <div class="col-sm-3">',
+        '        <label for=xl-range">Sheet No.</label>',
+        '        <div class="input-group input-group-sm">',
+        '            <input type="text" class="form-control" id="xl-sheet" placeholder="1">',
+        '        </div>',
+        '    </div>',
+        '    <div class="col-sm-3 px-0">',
+        '        <label for=xl-range">Range</label>',
+        '        <div class="input-group input-group-sm">',
+        '            <input type="text" class="form-control" id="xl-range" placeholder="[auto]">',
+        '        </div>',
+        '    </div>',
+        '</div>',
+        '</div>',
+        '<div class="render"></div>',
+    ].join('')
+    excelAttrib(div, data)
+    let input = div.children[0]
+    input.addEventListener('focus', function() {currentFocusInput = input; focusEntry(div)})
+    input.addEventListener('keypress', renderEntry)
+    div.addEventListener('click', function () {currentFocusInput = input; focusEntry(div)})
+    let browseButtons = div.querySelectorAll('.xl-browse')
+    let fileInput = div.querySelector('#xl-file')
+    for (let i = 0; i < browseButtons.length; i++) {
+        browseButtons[i].addEventListener('click', function() {chooseExcel(fileInput)})
+    }
+    div.querySelector('.xl-open').addEventListener('click', function() {pywebview.api.open_document([fileInput.value])})
+    return div
+}
+
+function chooseExcel(fileInput) {
+    pywebview.api.open_excel_file().then(function(fname) {
+        if (fname) {
+            fileInput.value = fname
+        }
+    })
 }
 
 function renderEntry(eve) {
