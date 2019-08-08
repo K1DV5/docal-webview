@@ -82,10 +82,103 @@ html, body {
                     </li>
                 </ul>
                 <div id="worksheet-menu">
-                    <button class="add-bel btn btn-sm btn-primary">Add</button>
-                    <button class="add-abv btn btn-sm btn-secondary">Add above</button>
-                    <button class="move-up btn btn-sm btn-secondary">Move up</button>
-                    <button class="move-dn btn btn-sm btn-secondary">Move down</button>
+                    <div class="btn-group btn-group-sm py-0">
+                        <button class="add-btn btn btn-sm btn-primary">Add</button>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="add-btn-xl dropdown-item">Add Excel</a>
+                                <a class="add-btn-py dropdown-item">Add Python</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group btn-group-sm py-0">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="insert-menu-btn btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Insert <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="calc-entry-options options-menu dropdown-menu p-2">
+                                <ul class="nav nav-tabs nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active pb-0" id="options-tab" data-toggle="tab" data-target="#options" role="tab" aria-controls="options" aria-selected="true"><small>Options</small></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link pb-0" id="greek-tab" data-toggle="tab" data-target="#greek" role="tab" aria-controls="greek" aria-selected="false"><small>Greek letters</small></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link pb-0" id="accent-tab" data-toggle="tab" data-target="#accent" role="tab" aria-controls="accent" aria-selected="false"><small>Accents</small></a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="options" role="tabpanel" aria-labelledby="options-tab">
+                                        <div class="input-group input-group-sm my-3">
+                                            <input type="text" class="form-control option option-unit" placeholder="Unit">
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <input type="text" class="form-control option option-note" placeholder="Note">
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <div class="d-inline">
+                                                <label for="select-steps">Steps &nbsp;</label>
+                                            </div>
+                                            <div class="d-inline" id="select-steps">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input option option-step" id="customCheck1" value="1">
+                                                    <label class="custom-control-label" for="customCheck1"><small>Equation</small></label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input option option-step" id="customCheck2" value="2">
+                                                    <label class="custom-control-label" for="customCheck2"><small>Equation with substituted values</small></label>
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input option option-step" id="customCheck3" value="3">
+                                                    <label class="custom-control-label" for="customCheck3"><small>Answer</small></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input option option-inline" id="customCheck4">
+                                            <label class="custom-control-label" for="customCheck4">Inline</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input option option-horizontal" id="customCheck5">
+                                            <label class="custom-control-label" for="customCheck5">Horizontal</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input option option-hidden" id="customCheck6">
+                                            <label class="custom-control-label" for="customCheck6">Hidden</label>
+                                        </div>
+                                        <button class="btn btn-primary btn-sm mt-3 insert-options-btn">Insert</button>
+                                        <button class="btn btn-secondary btn-sm mt-3 clear-options-btn">Clear</button>
+
+
+                                    </div>
+                                    <div class="tab-pane fade" id="greek" role="tabpanel" aria-labelledby="greek-tab">
+                                        <table class="table table-borderless table-responsive mt-2" id="greek-letters">
+                                            <!-- <tr> -->
+                                                <!-- <td>a</td> -->
+                                            <!-- </tr> -->
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="accent" role="tabpanel" aria-labelledby="accent-tab">
+                                        <table class="table table-borderless table-responsive mt-2" id="math-accents"></table>
+                                    </div>
+                                    <!-- <div class="py-2"> -->
+                                    <!--     <select class="custom-select custom-select-sm py-1" id="prime-characters"> -->
+                                    <!--         <option value="intro" selected>Prime characters</option> -->
+                                    <!--     </select> -->
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="render-btn btn btn-sm btn-secondary">Preview</button>
+                    <div class="btn-group btn-group-sm py-0">
+                        <button class="move-up btn btn-sm btn-secondary">Up</button>
+                        <button class="move-dn btn btn-sm btn-secondary">Down</button>
+                    </div>
                     <button class="del-btn btn btn-sm btn-danger">Delete</button>
                 </div>
                 <!-- <form class="form-inline my-2 my-md-0"> -->
@@ -96,7 +189,7 @@ html, body {
         </nav>
         <div class="container-fluid">
             <div class="row h-100">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="rounded border p-2 my-2">
                         <div>
                             <label for=doc-in">Document input</label>
@@ -148,51 +241,8 @@ html, body {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 h-100">
+                <div class="col-md-9 h-100">
                     <div id="worksheet"></div>
-                </div>
-                <div class="col-md-2 h-100 calc-entry-options">
-                    <div class="mb-3">
-                        Options
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <input type="text" class="form-control option option-unit" placeholder="Unit">
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <textarea class="form-control option option-note" placeholder="Note"></textarea>
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="d-inline">
-                            <label for="select-steps">Steps &nbsp;</label>
-                        </div>
-                        <div class="d-inline" id="select-steps">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input option option-step" id="customCheck1" value="1">
-                                <label class="custom-control-label" for="customCheck1">1</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input option option-step" id="customCheck2" value="2">
-                                <label class="custom-control-label" for="customCheck2">2</label>
-                            </div>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input option option-step" id="customCheck3" value="3">
-                                <label class="custom-control-label" for="customCheck3">3</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input option option-inline" id="customCheck4">
-                        <label class="custom-control-label" for="customCheck4">Inline</label>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input option option-horizontal" id="customCheck5">
-                        <label class="custom-control-label" for="customCheck5">Horizontal</label>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input option option-hidden" id="customCheck6">
-                        <label class="custom-control-label" for="customCheck6">Hidden</label>
-                    </div>
-                    <button class="btn btn-primary btn-sm mt-3 insert-options-btn">Insert</button>
                 </div>
             </div>
         </div>
