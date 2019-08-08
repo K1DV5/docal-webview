@@ -149,6 +149,11 @@ class Api():
 
         return processed
 
+    def click_insert_items(self, arg):
+        return {'greek': list(GREEK_LETTERS.items()),
+                'prime': list(PRIMES.items()),
+                'accent': list(MATH_ACCENTS.items())}
+
     def open_help(self, arg):
         startfile(path.relpath('assets/help.pdf'))
 
