@@ -21,66 +21,37 @@ class Api():
         self.calc_types = ('docal calculation files (*.dcl)', 'All files (*.*)')
         self.doc_types = ('Document files (*.tex;*.docx)', 'All files (*.*)')
         self.working_dict = {}
-        self.process = document().process_content
-        self.replaced = {
-            '\\begin{equation}': '\\[',
-            '\\end{equation}': '\\]',
-            '\\begin{align}\n\\begin{split}': '\\[\\begin{aligned}',
-            '\\end{split}\n\\end{align}': '\\end{aligned}\\]',
-            '\\slash': '/',
-        }
-        # the current condition of the entries (for performance)
-        self.current_tex = []
-        # code that is alien to normal people
-        self.pre_code = ['from math import *']
-        for code in self.pre_code:
-            exec(code, self.working_dict)
+        # for rendering
+        self.process = calculations([], 'latex', self.working_dict).process
         # the file opened when open_outfile() is called
         self.doc_in = self.doc_out = None
 
     def new_calc_file(self, arg):
         webview.set_title('docal')
 
-    def ascii_2_py(self, asc: str, include_pre=False):
-        # allow ^ as power, and implicit multiplication like 2x as 2*x
-        # replaced = {r'\^': '**', r'(^[^#].*)(\b\d+)(\w+\d*)(?=[^\w\d]*)': r'\1\2*\3'}
-        replaced = {r'\^': '**'}
-        py = asc
-        for old, new in replaced.items():
-            py = re.sub(old, new, py)
-        if include_pre:
-            return '\n\n'.join(self.pre_code + [py])
-        return py
-
-    def py_2_ascii(self, py: str):
-        replaced = {'**': '^'}
-        asc = py
-        for old, new in replaced.items():
-            asc = asc.replace(old, new)
-        return asc
-
     def open_calc_file(self, arg):
-        selected = webview.create_file_dialog(file_types=self.calc_types)
+        selected = [self.calc_file] if arg == 1 else webview.create_file_dialog(file_types=self.calc_types)
         if selected:
             with open(selected[0]) as file:
                 content = file.read()
+            tree = ET.fromstring(content)
             # change to the list with elements having assigns as last line
             chunks = []
-            incomplete = ''
-            for part in _split_module(content, comments=True):
-                if part[1] == 'assign':
-                    chunks.append(self.py_2_ascii(incomplete + part[0]))
-                    incomplete = ''
-                elif part[0] and part[1] in ['tag', 'comment']:
-                    incomplete += '#' + part[0] + '\n'
-                elif part[1] == 'real-comment':
-                    incomplete += '##' + part[0] + '\n'
-                else:
-                    incomplete += part[0] + '\n' 
-            chunks.append(self.py_2_ascii(incomplete))
+            for child in tree:
+                chunks.append([child.tag, self.data_convert(child.text, child.tag)])
             self.calc_file = selected[0]
             webview.set_title('docal - ' + selected[0])
-            return chunks
+            return {
+                    'in': tree.attrib['in'],
+                    'out': tree.attrib['out'],
+                    'level': tree.attrib['level'],
+                    'calc': chunks,
+                    }
+
+    def open_excel_file(self, fname):
+        selected = webview.create_file_dialog(file_types=('Excel file (*.xlsx)',))
+        if selected:
+            return selected[0]
 
     def save_calc_file(self, args):
         if self.calc_file == self.default_calc_file or args['saveas']:
