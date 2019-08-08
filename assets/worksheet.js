@@ -80,30 +80,61 @@ function moveEntry(eve) {
                 div.insertAdjacentElement('beforebegin', moved)
             }
         }
-    } else {
-        let moved = div.nextElementSibling
-        // if there is one after
-        if (moved) {
-            worksheet.removeChild(moved)
-            div.insertAdjacentElement('beforebegin', moved)
+        focusEntry(currentFocus, currentFocus.querySelector('.input'))
+        eve.preventDefault()
+    }
+}
+
+function insertChars(character, withUndersc) {
+    if (currentFocusInput && currentFocusInput.style.display == 'block' && currentFocusInput.parentElement == currentFocus) {
+        let input = currentFocusInput
+        character = withUndersc? '_' + character : character
+        input.value = input.value.substring(0, input.selectionStart) + character + input.value.substring(input.selectionStart)
+    }
+}
+
+// for prepClickInsert
+function insertToMenu(menu, items, withUndersc) {
+    let trow = document.createElement('tr')
+    for (let i = 0; i < items.length; i++) {
+        let charac = document.createElement('td')
+        charac.value = items[i][0]
+        charac.innerHTML = items[i][1]
+        charac.addEventListener('click', function() {insertChars(charac.value, withUndersc); menu.selectedIndex = 0})
+        trow.appendChild(charac)
+        if ((i + 1) % 8 == 0) {
+            menu.appendChild(trow)
+            trow = document.createElement('tr')
         }
     }
-    focusEntry(currentFocus, currentFocus.querySelector('.input'))
-    eve.preventDefault()
+    menu.appendChild(trow)
 }
 
 function updateEntries() {
-    let entryDivs = document.getElementById('worksheet').children
+    let entryDivs = worksheet.children
     let paraDivs = []
     for (let i = 0; i < entryDivs.length; i++) {
-        paraDivs.push(entryDivs[i].querySelector('div'))
+        paraDivs.push(entryDivs[i].querySelector('.render'))
     }
-    renderPara(paraDivs, true)
+    renderPara(paraDivs)
 }
 
-function resizeEntry(arg) {
-    let input = arg.currentTarget
-    input.style.height = '1px'
+// prepare click insert items (convenience)
+function prepClickInsert() {
+    pywebview.api.click_insert_items().then(function(items) {
+        let greekList = document.querySelector('#greek-letters')
+        insertToMenu(greekList, items['greek'])
+        let accentsList = document.querySelector('#math-accents')
+        insertToMenu(accentsList, items['accent'], true)
+        // let primesList = document.querySelector('#prime-characters')
+        // insertToMenu(primesList, items['prime'], true)
+    })
+}
+
+function resizeEntry(input) {
+    // to prevent jumping to the top:
+    scrollTop = worksheet.scrollTop
+    input.style.height = 'auto'
     input.style.height = input.scrollHeight + 'px'
 }
 
