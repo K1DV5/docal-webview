@@ -26,8 +26,7 @@ function focusEntry(div, input) {
 function editEntry(eve) {
     scrollTop = worksheet.scrollTop
     let target = eve.currentTarget
-    let paraDiv = target.querySelector('div')
-    paraDiv.style.display = 'none'
+    let paraDiv = target.querySelector('.render')
     let input = target.querySelector('.input')
     paraDiv.style.display = 'none'
     input.style.display = 'block'
@@ -35,8 +34,17 @@ function editEntry(eve) {
 }
 
 function delEntry() {
-    let worksheet = document.querySelector('#worksheet')
-    worksheet.removeChild(currentFocus)
+    if (currentFocus) {
+        var next = currentFocus.nextElementSibling
+        var prev = currentFocus.previousElementSibling
+        worksheet.removeChild(currentFocus)
+        currentFocus = null
+    }
+    if (next) {
+        focusEntry(next, next.querySelector('.input'))
+    } else if (prev) {
+        focusEntry(prev, prev.querySelector('.input'))
+    }
 }
 
 function addEntry(eve, nextTo) {
