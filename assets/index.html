@@ -70,7 +70,7 @@ html, body {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             File
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -83,7 +83,7 @@ html, body {
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Operations
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -95,12 +95,12 @@ html, body {
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle py-0" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Help
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" id="toolbar-help">Help</a>
-                            <a class="dropdown-item" id="toolbar-about">About docal</a>
+                            <a class="dropdown-item" id="toolbar-about">About</a>
                         </div>
                     </li>
                 </ul>
@@ -215,7 +215,7 @@ html, body {
                 <div class="col-md-3">
                     <div class="rounded border p-2 my-2">
                         <div>
-                            <label for=doc-in">Document input</label>
+                            <label for=doc-in">Input document</label>
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control" id="doc-in" placeholder="Path/to/file">
                                 <div class="input-group-append">
@@ -232,7 +232,7 @@ html, body {
                             </div>
                         </div>
                         <div class="mt-5">
-                            <label for=doc-out">Document output</label>
+                            <label for=doc-out">Output document</label>
                             <div class="input-group mb-3 input-group-sm">
                                 <input type="text" class="form-control" id="doc-out" placeholder="Path/to/file">
                                 <div class="input-group-append">
@@ -247,9 +247,11 @@ html, body {
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-5 input-group input-group-sm">
-                            <label for="log-level">Minimum log level</label>
-                            <div>
+                        <div class="mt-5 input-group input-group-sm container-fluid row">
+                            <div class="col-sm-6 px-0">
+                                <label for="log-level">Minimum log level</label>
+                            </div>
+                            <div class="col-sm-6 px-0 mr-0">
                                 <select class="custom-select log-level custom-select-sm" id="log-level">
                                     <option value="WARNING" selected>Warnings</option>
                                     <option value="ERROR">Errors</option>
