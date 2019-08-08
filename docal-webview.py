@@ -119,45 +119,33 @@ class Api():
             self.doc_in = doc.document_file.infile
             self.doc_out = doc.document_file.outfile
             if doc.log:
-                return ['Log', doc.log]
+                return ['Success', doc.log]
+            else:
+                return ['Success', ['There are no other messages to show.']]
 
-    def process_and_tex(self, inputs: list):
+    def render(self, inputs: list):
         flush, chunks = inputs
         # to update all without using pre-existing values
         if flush:
             self.working_dict = {}
-            for code in self.pre_code:
-                exec(code, self.working_dict)
         processed = []
         for chunk in chunks:
-            if chunk:
+            if chunk[1]:
                 try:
                     built = ''
-                    processed_ls = self.process(self.ascii_2_py(chunk), self.working_dict)
                     c_tag = None
-                    for tag, part in processed_ls:
+                    for tag, part in self.process(chunk[1], chunk[0]):
                         if tag != c_tag and tag:
                             built += f'[#TAG]{tag}\n\n'
                             c_tag = tag
-                        built += part + '\n'
-                    for o, r in self.replaced.items():
-                        built = built.replace(o, r)
-                    # so the user can click end edit, put something
-                    built = built if built.strip() else '[HIDDEN]'
+                        built += part[1] + '\n'
                     chunk_tex = built.split('\n\n')
                     processed.append(chunk_tex)
                 except Exception as exc:
-                    processed.append([f'[ERROR:] {exc.args[0]}'])
+                    processed.append([f'[ERROR] {exc.args[0]}'])
                     # raise exc
             else:
                 processed.append(chunk)
-        # this is for performance, selective updating
-        if flush:
-            self.current_tex = []
-            for index, (current, new) in enumerate(zip(self.current_tex, processed)):
-                if current == new:
-                    processed[index] = 0
-        self.current_tex += processed
 
         return processed
 
