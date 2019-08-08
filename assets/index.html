@@ -14,6 +14,7 @@
         <style>
 html, body {
     height: 100%;
+    font-size: 10pt;
 }
 
 .katex {
@@ -23,20 +24,42 @@ html, body {
 #worksheet {
     height: 99%;
     overflow-y: scroll;
+    font-family: serif;
+    font-size: 12pt;
+    background-image: url("watermark.svg");
+}
+
+#worksheet .input {
+    border: none;
+    font-family: sans-serif;
+}
+
+#worksheet .type-python .input {
+    font-family: monospace;
+}
+
+#worksheet .type-excel .input {
+    font-size: 10pt;
 }
 
 #worksheet div {
-    font-family: serif;
-    font-size: 12pt;
+    background-color: white;
 }
 
-#worksheet textarea {
-    font-family: monospace;
-    border: none;
+.calc-entry-options {
+    width: 20em;
+}
+
+.calc-entry-options td:hover {
+    background-color: rgba(0, 50, 80, 0.2);
 }
 
 .container-fluid {
     height: 92%;
+}
+
+.nav {
+    height: 2em;
 }
         </style>
 
