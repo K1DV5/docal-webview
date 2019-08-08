@@ -221,32 +221,22 @@ function chooseExcel(fileInput) {
 }
 
 function renderEntry(eve) {
-    if (eve.key == 'Enter') {
-        let input = eve.currentTarget
-        if (input.value.trim()) {
-            let lineNo = input.value.slice(0, input.selectionStart).split('\n').length - 1
-            let currentLine = input.value.split('\n')[lineNo]
-            if (eve.ctrlKey || currentLine.match(/^\s*[^#]+/)) {
-                let div = eve.currentTarget.parentElement
-                let paraDiv = div.querySelector('div')
-                // only if there is something meaningful
+    if (currentFocusInput) {
+        if (eve.type == 'click') {
+            let div = currentFocusInput.parentElement
+            let next = div.nextElementSibling
+            // add entry below if the user has already started working with multiple entries and other conds
+            if (!next) {
+                let paraDiv = div.querySelector('.render')
                 renderPara([paraDiv])
-                let next = eve.currentTarget.parentElement.nextElementSibling
-                // add entry below if the user has already started working with multiple entries and other conds
-                if (!next) {
-                    addEntry(eve, true)
-                } else {
-                    updateEntries()
-                }
-                eve.preventDefault()
+            } else {
+                updateEntries()
             }
-        }
-    } else if (eve.key == 'Esc') {
-        // ignore the editting one and close it
-        let input = eve.currentTarget
-        // work only if there is something in the div, to avoid unclickable div
-        let paraDiv = input.parentElement.querySelector('div')
-        if (paraDiv.children.length) {
+            eve.preventDefault()
+        } else if (eve.key == 'Esc') {
+            // ignore the editting one and close it
+            let input = eve.currentTarget
+            let paraDiv = input.parentElement.querySelector('.render')
             input.style.display = 'none'
             paraDiv.style.display = 'block'
             eve.preventDefault()
