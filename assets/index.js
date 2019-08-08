@@ -50,13 +50,8 @@ function messageBox(title, message) {
 }
 
 function sendCalcs(clear) {
-    let data = {
-        'in': $('#doc-in').val(),
-        'clear': clear,
-        'calc': elem2Str(),
-        'out': $('#doc-out').val(),
-        'level': $('.log-level').val()
-    }
+    let data = toFile()
+    data['clear'] = clear
 
     pywebview.api.send_calcs(data).then(function(resp) {
         let log = resp[1].join('<br/>')
