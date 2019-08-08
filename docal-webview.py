@@ -1,9 +1,13 @@
-from pprint import pprint
+# -args(D:\K1DV5\Documentsb\Code\docal\RnD\introduce-dcl\foo.dcl)
 import re
 from os import path, startfile
 import webview
+import xml.etree.ElementTree as ET
+from argparse import ArgumentParser
 from docal import document
-from docal.utils import _split_module
+from docal.document import calculations, EXCEL_SEP
+from docal.parsing import GREEK_LETTERS, PRIMES, MATH_ACCENTS
+from docal.__main__ import args as cli_args
 
 
 class Api():
@@ -83,9 +87,29 @@ class Api():
                 self.calc_file = selected
             else:
                 return path.basename(self.calc_file)
-        with open(self.calc_file, 'w') as file:
-            file.write(self.ascii_2_py(args['contents'], True))
+        chunks = args['calc']
+        attrib = {'in': args['in'], 'out': args['out'], 'level': args['level']}
+        document = ET.Element('document', attrib)
+        for typ, content in chunks:
+            child = ET.SubElement(document, typ)
+            child.text = self.data_convert(content)
+        tree = ET.ElementTree(document)
+        tree.write(self.calc_file, 'utf-8')
         webview.set_title('docal - ' + self.calc_file)
+
+    def data_convert(self, content, typ=None):
+        if type(content) == str:
+            if typ == 'excel':
+                # excel data string
+                data = {}
+                for cont in content.split('\n'):
+                    if cont.strip():
+                        cont_sp = cont.split(EXCEL_SEP)
+                        data[cont_sp[0]] = cont_sp[1]
+                return data
+            return content
+        elif type(content) == dict:
+            return '\n'.join([key + EXCEL_SEP + val for key, val in content.items()])
 
     def select_doc_file(self, direc=None):
         if direc is None:
