@@ -20,10 +20,12 @@ function focusEntry(div, input) {
 }
 
 function editEntry(eve) {
+    scrollTop = worksheet.scrollTop
     let target = eve.currentTarget
     let paraDiv = target.querySelector('div')
     paraDiv.style.display = 'none'
     let input = target.querySelector('.input')
+    paraDiv.style.display = 'none'
     input.style.display = 'block'
     focusEntry(target, input)
 }
@@ -122,6 +124,10 @@ function renderEntry(eve) {
             input.style.display = 'none'
             paraDiv.style.display = 'block'
             eve.preventDefault()
+        }
+        worksheet.scrollTop = scrollTop
+        for (let i = 0; i < inputOnly.length; i++) {
+            inputOnly[i].disabled = true
         }
     }
 }
