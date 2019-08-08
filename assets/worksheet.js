@@ -248,36 +248,46 @@ function renderEntry(eve) {
     }
 }
 
-function configNewDiv(div, texStr, editable) {
-    texStr = texStr || ''
-    // config div
-    div.className = 'rounded border my-1 p-1'
-    div.tabIndex = '0'
-    div.addEventListener('focus', function() {focusEntry(div)})
-    div.addEventListener('dblclick', editEntry)
-    let input = document.createElement('textarea')
-    let paraDiv = document.createElement('div')
-    // insert to div
-    div.appendChild(input)
-    div.appendChild(paraDiv)
-    // configure input
-    input.value = texStr
-    input.placeholder = '## Start typing your calculations.'
-    input.className = 'form-control input'
-    input.addEventListener('input', resizeEntry)
-    input.addEventListener('keydown', renderEntry)
-    input.addEventListener('focus', function() {currentFocusInput = input; focusEntry(div)})
-    input.style.height = '1px'
-    input.style.height = input.scrollHeight + 'px'
-    // configure paraDiv
-    paraDiv.addEventListener('click', focusEntry(div))
-    // what to show
-    if (editable || !texStr) {
-        paraDiv.style.display = 'none'
-        input.style.display = 'block'
+function entryData(div) {
+    if (div.classList.contains('type-ascii')) {
+        var type = 'ascii'
+    } else if (div.classList.contains('type-python')) {
+        var type = 'python'
+    } else if (div.classList.contains('type-excel')) {
+        var type = 'excel'
+    }
+    let input = div.querySelector('.input');
+    if (type == 'ascii' || type == 'python') {
+        return [type, input.value.trim()]
+    } else if (type == 'excel') {
+        return [type, excelAttrib(div)]
+    }
+}
+
+function excelAttrib(div, attrib) {
+    let input = div.querySelector('.input')
+    let file = input.querySelector('#xl-file')
+    let sheet = input.querySelector('#xl-sheet')
+    let range = input.querySelector('#xl-range')
+    if (attrib) {
+        file.value = attrib.file
+        if (attrib.sheet) {
+            sheet.value = attrib.sheet
+        }
+        if (attrib.range) {
+            range.value = attrib.range
+        }
     } else {
-        paraDiv.style.display = 'block'
-        input.style.display = 'none'
+        let xlData = {'file': file.value.trim()}
+        let sheetData = sheet.value.trim()
+        let rangeData = range.value.trim()
+        if (sheetData) {
+            xlData['sheet'] = sheetData
+        }
+        if (rangeData) {
+            xlData['range'] = rangeData
+        }
+        return xlData
     }
 }
 
